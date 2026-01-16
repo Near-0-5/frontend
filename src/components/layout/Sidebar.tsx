@@ -1,4 +1,10 @@
-import { Heart, Home, Mic2, Radio, User } from 'lucide-react';
+import {
+  HeartIcon,
+  HomeIcon,
+  Mic2Icon,
+  RadioIcon,
+  UserIcon,
+} from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 
 type SidebarProps = {
@@ -10,11 +16,11 @@ export function Sidebar({ isOpen }: SidebarProps) {
   const location = useLocation();
 
   const menuItems = [
-    { icon: Home, label: '홈', path: '/' },
-    { icon: User, label: 'My Page', path: '/mypage' },
-    { icon: Mic2, label: 'Artist', path: '/artist' },
-    { icon: Radio, label: 'Streaming', path: '/streaming' },
-    { icon: Heart, label: 'Favorite', path: '/favorite' },
+    { icon: HomeIcon, label: '홈', path: '/' },
+    { icon: UserIcon, label: 'My Page', path: '/mypage' },
+    { icon: Mic2Icon, label: 'Artist', path: '/artist' },
+    { icon: RadioIcon, label: 'Streaming', path: '/streaming' },
+    { icon: HeartIcon, label: 'Favorite', path: '/favorite' },
   ];
 
   return (
