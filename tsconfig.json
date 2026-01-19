@@ -3,9 +3,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "strict": true
   },
-  "strict": true,
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
