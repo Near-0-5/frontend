@@ -1,4 +1,11 @@
-import { MenuIcon } from 'lucide-react';
+import {
+  BellIcon,
+  ChevronDownIcon,
+  MenuIcon,
+  SearchIcon,
+  UserIcon,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 
 import { ROUTES_PATHS } from '@/constants';
@@ -10,6 +17,12 @@ type HeaderProps = {
 };
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
     <header className="sticky top-0 z-60 flex items-center justify-between border-b border-[#E5E7EB] bg-[#070913] px-6 py-3">
       <div className="flex items-center justify-start gap-3">
@@ -28,9 +41,43 @@ export function Header({ onMenuClick }: HeaderProps) {
           Near 0.5
         </Link>
       </div>
-      <Button rounded="sm" size="sm" variant="lightGrey">
-        로그인
-      </Button>
+      {!isLoggedIn ? (
+        <Button
+          onClick={handleLogin}
+          rounded="sm"
+          size="sm"
+          variant="lightGrey"
+        >
+          로그인
+        </Button>
+      ) : (
+        <div className="flex items-center gap-3">
+          <Button className="text-[#ffffff]" size="icon" variant="ghost">
+            <SearchIcon size={22} />
+          </Button>
+
+          <div className="relative">
+            <Button className="text-[#ffffff]" size="icon" variant="ghost">
+              <BellIcon size={22} />
+            </Button>
+            <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+              3
+            </span>
+          </div>
+
+          <div className="ml-2 flex items-center gap-1">
+            <Button
+              className="h-10 w-10 rounded-full bg-purple-500 p-0 hover:bg-purple-600"
+              variant="ghost"
+            >
+              <UserIcon className="text-white" size={20} />
+            </Button>
+            <Button className="text-[#ffffff]" size="icon" variant="ghost">
+              <ChevronDownIcon size={20} />
+            </Button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
