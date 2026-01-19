@@ -25,16 +25,13 @@ export function Sidebar({ isOpen }: SidebarProps) {
 
   return (
     <>
-      {/* 사이드바 */}
       <aside
-        className={`fixed top-0 left-0 z-50 flex h-screen w-[240px] flex-col bg-[#070913] transition-transform duration-300 ${
+        className={`fixed top-0 left-0 z-50 flex h-screen w-60 flex-col bg-[#070913] transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* 상단: 로고 + 닫기 버튼 */}
-        <div className="border-border-default flex h-[60px] items-center justify-between border-b px-4"></div>
+        <div className="border-border-default h-15 border-b px-4"></div>
 
-        {/* 메뉴 */}
         <nav className="flex-1 px-4 py-4">
           {menuItems.map(item => {
             const Icon = item.icon;

@@ -11,7 +11,7 @@ type HeaderProps = {
 
 export function Header({ onMenuClick }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-[60] flex items-center justify-between border-b border-[#E5E7EB] bg-[#070913] px-6 py-3">
+    <header className="sticky top-0 z-60 flex items-center justify-between border-b border-[#E5E7EB] bg-[#070913] px-6 py-3">
       <div className="flex items-center justify-start gap-3">
         <Button
           className="text-[#ffffff]"
