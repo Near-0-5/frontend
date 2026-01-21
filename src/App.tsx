@@ -2,13 +2,17 @@ import { Route, Routes } from 'react-router';
 
 import { MainLayout } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
-import { MainPage, NotFound } from '@/pages';
+import { MainPage, NotFound, StreamingPage } from '@/pages';
 
 function App() {
   const ROUTES = [
     {
       element: <MainPage />,
       path: ROUTES_PATHS.MAIN,
+    },
+    {
+      element: <StreamingPage />,
+      path: ROUTES_PATHS.STREAMING,
     },
     {
       element: <NotFound />,

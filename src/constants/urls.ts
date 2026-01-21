@@ -6,5 +6,5 @@ export const ROUTES_PATHS = {
   MYPAGE: '/mypage',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
-  STREAMING: '/streaming',
+  STREAMING: '/live-stream',
 };
