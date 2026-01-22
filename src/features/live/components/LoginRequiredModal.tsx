@@ -1,21 +1,45 @@
-import { Modal, ModalContent, ModalTrigger } from '@/components';
+import { Button } from '@/components';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components';
 
 type LoginRequiredModalProps = {
-  children: React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm?: () => void;
 };
 
 export default function LoginRequiredModal({
-  children,
+  isOpen,
+  onClose,
+  onConfirm,
 }: LoginRequiredModalProps) {
   return (
-    <Modal>
-      <ModalTrigger asChild>{children}</ModalTrigger>
+    <Dialog onOpenChange={onClose} open={isOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>로그인이 필요합니다</DialogTitle>
+          <DialogDescription>
+            로그인 후 채팅에 참여할 수 있습니다.
+          </DialogDescription>
+        </DialogHeader>
 
-      <ModalContent>
-        <p className="text-sm text-gray-600">
-          로그인 후 채팅을 이용할 수 있습니다.
-        </p>
-      </ModalContent>
-    </Modal>
+        <div className="mt-4 flex justify-end gap-2">
+          <Button onClick={onClose} size="sm" variant="white">
+            닫기
+          </Button>
+
+          {onConfirm && (
+            <Button onClick={onConfirm} size="sm">
+              로그인
+            </Button>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
