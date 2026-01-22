@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { Button } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
@@ -16,14 +17,16 @@ type HeaderProps = {
 };
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
+    navigate(ROUTES_PATHS.LOGIN);
   };
 
   return (
-    <header className="sticky top-0 z-60 flex items-center justify-between border-b border-[#E5E7EB] bg-[#070913] px-6 py-3">
+    <header className="fixed top-0 right-0 left-0 z-50 flex h-15 items-center justify-between border-b border-[#E5E7EB] bg-[#070913] px-6 py-3">
       <div className="flex items-center justify-start gap-3">
         <Button
           className="text-[#ffffff]"

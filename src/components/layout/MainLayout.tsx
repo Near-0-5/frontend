@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router';
 
 import { Header, Sidebar, Toaster } from '@/components';
+import { cn } from '@/utils';
 
 export default function MainLayout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,9 +11,14 @@ export default function MainLayout() {
     <div className="min-h-screen">
       <Header onMenuClick={() => setIsOpen(!isOpen)} />
 
-      <div className="flex">
+      <div className="flex pt-15">
         <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        <main className="flex-1">
+        <main
+          className={cn(
+            'flex-1 transition-all duration-300',
+            isOpen ? 'ml-60' : 'ml-0',
+          )}
+        >
           <Outlet />
         </main>
       </div>

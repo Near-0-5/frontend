@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router';
 
 import { MainLayout } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
-import { MainPage, NotFound, StreamingPage } from '@/pages';
+import { LoginPage, MainPage, NotFound, StreamingPage } from '@/pages';
 
 function App() {
   const ROUTES = [
@@ -17,6 +17,10 @@ function App() {
     {
       element: <NotFound />,
       path: ROUTES_PATHS.NOT_FOUND,
+    },
+    {
+      element: <LoginPage />,
+      path: ROUTES_PATHS.LOGIN,
     },
   ];
 

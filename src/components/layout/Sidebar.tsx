@@ -29,13 +29,13 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'flex h-screen flex-col overflow-hidden bg-[#070913] transition-all duration-300',
+        'fixed top-15 left-0 z-40 flex h-[calc(100vh-60px)] flex-col overflow-hidden bg-[#070913] transition-all duration-300',
         isOpen ? 'w-60' : 'w-0',
       )}
     >
-      <div className="h-15 shrink-0" />
+      <div className="shrink-0" />
 
-      <nav className="flex-1 px-4">
+      <nav className="flex-1 px-4 py-10">
         {menuItems.map(item => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
