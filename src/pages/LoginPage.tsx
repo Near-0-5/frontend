@@ -4,8 +4,8 @@ import { KakaoIcon, NaverIcon } from '@/assets';
 import { Button } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
 
-const KAKAO_LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/kakao/login`;
-const NAVER_LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/naver/login`;
+const KAKAO_LOGIN_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/auth/kakao/login`;
+const NAVER_LOGIN_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/auth/naver/login`;
 
 export default function LoginPage() {
   const handleKakoLogin = () => {
