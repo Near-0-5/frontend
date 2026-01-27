@@ -47,7 +47,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   };
 
   const handleLogout = () => {
-    logout(); // Zustand의 logout 사용
+    logout();
     setIsDropdownOpen(false);
     navigate(ROUTES_PATHS.MAIN);
   };
