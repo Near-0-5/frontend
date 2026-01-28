@@ -1,6 +1,9 @@
-import type { MyPageMenuItem } from '../types/menu';
+import type { MyPageMenuKey } from '../types/menu';
 
-export const MY_PAGE_MENU: MyPageMenuItem[] = [
-  { key: 'interest', label: '관심사' },
+export const MENU_ITEMS: {
+  key: MyPageMenuKey;
+  label: string;
+}[] = [
   { key: 'account', label: '계정' },
+  { key: 'interest', label: '관심사' },
 ];

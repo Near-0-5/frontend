@@ -1,7 +1,7 @@
-export type FavoriteGenre = {
-  icon: GenreIconType;
-  id: number;
-  label: string;
-};
+import type { LucideIcon } from 'lucide-react';
 
-export type GenreIconType = 'guitar' | 'mic' | 'music' | 'theater';
+export type FavoriteGenre = {
+  icon: LucideIcon;
+  id: number;
+  name: string;
+};

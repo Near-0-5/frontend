@@ -1,32 +1,32 @@
-import type { MyPageMenuKey } from '@/features/my-page/types';
+import { cn } from '@/utils';
 
-import { MY_PAGE_MENU } from '@/features/my-page/constants/myPageMenu';
+import type { MyPageMenuKey } from '../types/menu';
 
-type Props = {
+import { MENU_ITEMS } from '../constants/myPageMenu';
+
+type MyPageMenuProps = {
   activeKey: MyPageMenuKey;
   onChange: (key: MyPageMenuKey) => void;
 };
 
-export default function MyPageMenu({ activeKey, onChange }: Props) {
+export default function MyPageMenu({ activeKey, onChange }: MyPageMenuProps) {
   return (
-    <nav className="mt-4 border-b border-white/10">
+    <nav className="mt-8 border-b border-white/10">
       <ul className="flex gap-8">
-        {MY_PAGE_MENU.map(menu => {
-          const isActive = menu.key === activeKey;
+        {MENU_ITEMS.map(({ key, label }) => {
+          const isActive = key === activeKey;
 
           return (
-            <li key={menu.key}>
+            <li key={key}>
               <button
-                className={[
-                  'pb-4 text-sm font-medium transition',
-                  isActive
-                    ? 'border-b-2 border-white text-white'
-                    : 'text-white/50 hover:text-white',
-                ].join(' ')}
-                onClick={() => onChange(menu.key)}
+                className={cn(
+                  'pb-4 text-sm font-medium text-[#c7c9d9]',
+                  isActive && 'border-b-2 border-white text-white',
+                )}
+                onClick={() => onChange(key)}
                 type="button"
               >
-                {menu.label}
+                {label}
               </button>
             </li>
           );

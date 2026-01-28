@@ -1,34 +1,22 @@
-import type { FavoriteArtist } from '@/features/my-page/types/artist';
+type FavoriteArtist = {
+  id: number;
+  name: string;
+};
 
-type Props = {
+type FavoriteArtistCardProps = {
   artist: FavoriteArtist;
 };
 
-export default function FavoriteArtistCard({ artist }: Props) {
+export default function FavoriteArtistCard({
+  artist,
+}: FavoriteArtistCardProps) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl bg-[#1A1F2E]">
-      <img
-        alt={artist.name}
-        className="aspect-video w-full object-cover"
-        src={artist.imageUrl}
-      />
+    <div className="flex items-center justify-between rounded-xl bg-[#1a1f2e] px-4 py-3">
+      <span className="text-sm font-medium text-white">{artist.name}</span>
 
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="text-sm text-[#C7C9D9]">{artist.category}</div>
-
-        <div className="text-base font-semibold text-white">{artist.name}</div>
-
-        <div className="text-xs text-[#9CA3AF]">
-          {artist.followerCount.toLocaleString()} 팔로워
-        </div>
-
-        <button
-          className="mt-auto rounded-xl bg-[#D1D5DB] py-2 text-sm font-medium text-[#101828]"
-          type="button"
-        >
-          팔로우 취소
-        </button>
-      </div>
+      <span aria-label="좋아요" role="img">
+        ❤️
+      </span>
     </div>
   );
 }

@@ -1,6 +1,5 @@
-export type ProfileCardProps = {
+export type ProfileSummary = {
   description?: string;
   followerCount: number;
-  profileImageUrl?: string;
   userName: string;
 };

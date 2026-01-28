@@ -19,11 +19,40 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   const location = useLocation();
 
   const menuItems = [
-    { icon: HomeIcon, label: '홈', path: ROUTES_PATHS.MAIN },
-    { icon: UserIcon, label: 'My Page', path: ROUTES_PATHS.MYPAGE },
-    { icon: Mic2Icon, label: 'Artist', path: ROUTES_PATHS.ARTIST },
-    { icon: RadioIcon, label: 'Streaming', path: ROUTES_PATHS.STREAMING },
-    { icon: HeartIcon, label: 'Favorite', path: ROUTES_PATHS.FAVORITE },
+    {
+      icon: HomeIcon,
+      isActive: location.pathname === ROUTES_PATHS.MAIN,
+      label: '홈',
+      path: ROUTES_PATHS.MAIN,
+    },
+    {
+      icon: UserIcon,
+      isActive:
+        location.pathname === ROUTES_PATHS.MYPAGE &&
+        location.search === '?tab=account',
+      label: 'My Page',
+      path: `${ROUTES_PATHS.MYPAGE}?tab=account`,
+    },
+    {
+      icon: Mic2Icon,
+      isActive: location.pathname === ROUTES_PATHS.ARTIST,
+      label: 'Artist',
+      path: ROUTES_PATHS.ARTIST,
+    },
+    {
+      icon: RadioIcon,
+      isActive: location.pathname === ROUTES_PATHS.STREAMING,
+      label: 'Streaming',
+      path: ROUTES_PATHS.STREAMING,
+    },
+    {
+      icon: HeartIcon,
+      isActive:
+        location.pathname === ROUTES_PATHS.MYPAGE &&
+        location.search === '?tab=interest',
+      label: 'Favorite',
+      path: `${ROUTES_PATHS.MYPAGE}?tab=interest`,
+    },
   ];
 
   return (
@@ -33,22 +62,19 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         isOpen ? 'w-60' : 'w-0',
       )}
     >
-      <div className="shrink-0" />
-
       <nav className="flex-1 px-4 py-10">
         {menuItems.map(item => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path;
 
           return (
             <Link
               className={cn(
-                'mb-1 flex items-center gap-3 rounded-xl px-4 py-3 whitespace-nowrap transition-all duration-200',
-                isActive
-                  ? 'text-text-primary bg-[#dc196d] shadow-md'
-                  : 'hover:bg-bg-section-dark hover:text-text-primary text-[#c7c9d9]',
+                'mb-1 flex items-center gap-3 rounded-xl px-4 py-3 transition-all',
+                item.isActive
+                  ? 'bg-[#dc196d] text-white shadow-md'
+                  : 'hover:bg-bg-section-dark text-[#c7c9d9] hover:text-white',
               )}
-              key={item.path}
+              key={item.label}
               to={item.path}
             >
               <Icon size={20} />
