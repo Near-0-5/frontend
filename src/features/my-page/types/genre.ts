@@ -1,5 +1,7 @@
 export type FavoriteGenre = {
-  icon: string;
+  icon: GenreIconType;
   id: number;
   label: string;
 };
+
+export type GenreIconType = 'guitar' | 'mic' | 'music' | 'theater';
