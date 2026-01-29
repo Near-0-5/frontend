@@ -2,37 +2,46 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { ROUTES_PATHS } from '@/constants';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from '@/features/auth';
+
+const SEARCH_PARAMS = {
+  ACCESS_TOKEN: 'access_token',
+  IS_NEW_USER: 'is_new_user',
+};
+
+const REDIRECT_KEY = 'login_redirect';
 
 export default function KakaoCallback() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login } = useAuthStore();
+  const setAccessToken = useAuthStore(state => state.setAccessToken);
 
   useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
+    const accessToken = searchParams.get(SEARCH_PARAMS.ACCESS_TOKEN);
 
-    const userDataString = searchParams.get('user');
+    if (accessToken) {
+      setAccessToken(accessToken);
 
-    if (accessToken && refreshToken) {
-      const user = userDataString
-        ? JSON.parse(decodeURIComponent(userDataString))
-        : null;
+      const REDIRECT_PATH = localStorage.getItem(REDIRECT_KEY);
 
-      login(user, accessToken, refreshToken);
+      if (REDIRECT_PATH) {
+        localStorage.removeItem(REDIRECT_KEY);
 
-      navigate(ROUTES_PATHS.MAIN);
+        navigate(REDIRECT_PATH, { replace: true });
+      } else {
+        navigate(ROUTES_PATHS.MAIN, { replace: true });
+      }
     } else {
       console.error('토큰을 받지 못했습니다');
-      navigate(ROUTES_PATHS.LOGIN);
+
+      navigate(ROUTES_PATHS.LOGIN, { replace: true });
     }
-  }, [searchParams, login, navigate]);
+  }, [searchParams, navigate, setAccessToken]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#070913]">
       <div className="text-center">
-        <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-white"></div>
+        <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-white" />
         <p className="text-lg text-white">로그인 처리 중...</p>
       </div>
     </div>

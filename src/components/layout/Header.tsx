@@ -10,16 +10,17 @@ import { Link, useNavigate } from 'react-router';
 
 import { Button } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from '@/features/auth';
 
 type HeaderProps = {
   onMenuClick: () => void;
 };
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const isLoggedIn = useAuthStore(state => Boolean(state.accessToken));
+  const logout = useAuthStore(state => state.logout);
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated); // 여기!
-  const logout = useAuthStore(state => state.logout); // 여기!
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -46,10 +47,10 @@ export function Header({ onMenuClick }: HeaderProps) {
     navigate(ROUTES_PATHS.LOGIN);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
     setIsDropdownOpen(false);
-    navigate(ROUTES_PATHS.MAIN);
+    await logout();
+    navigate(ROUTES_PATHS.LOGIN);
   };
 
   const toggleDropdown = () => {
@@ -74,7 +75,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           Near 0.5
         </Link>
       </div>
-      {!isAuthenticated ? (
+      {!isLoggedIn ? (
         <Button
           onClick={handleLogin}
           rounded="sm"
