@@ -1,9 +1,7 @@
-import type { OngoingStreamingSectionProps } from '@/features/main/types';
+import type { SectionProps as OngoingStreamingSectionProps } from '@/types/concert';
 
-import { SectionHeader } from '@/components';
+import { OngoingLiveCard, SectionHeader } from '@/components';
 import { DUMMY_ONGOING_LIVES } from '@/features/main/mocks/mainData';
-
-import OngoingLiveCard from './OngoingLiveCard';
 
 export default function OngoingStreamingSection({
   title,

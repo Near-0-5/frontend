@@ -1,4 +1,4 @@
-import type { OngoingLiveCardProps } from '@/types/concert';
+import type { OngoingLiveCardProps } from '@/features/main/types';
 
 export default function OngoingLiveCard({
   durationLabel,

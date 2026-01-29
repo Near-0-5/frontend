@@ -1,9 +1,7 @@
-import type { UpcomingStreamingSectionProps } from '@/features/main/types';
+import type { SectionProps as UpcomingStreamingSectionProps } from '@/types/concert';
 
-import { SectionHeader } from '@/components';
+import { ConcertCard, SectionHeader } from '@/components';
 import { DUMMY_CONCERTS } from '@/features/main/mocks/mainData';
-
-import ConcertCard from './ConcertCard';
 
 export default function UpcomingStreamingSection({
   title,

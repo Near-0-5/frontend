@@ -1,4 +1,4 @@
-import type { ConcertCardProps } from '@/types/concert';
+import type { ConcertCardProps } from '@/features/main/types';
 
 import { Button } from '@/components';
 

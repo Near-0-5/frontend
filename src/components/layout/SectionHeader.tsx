@@ -23,7 +23,12 @@ export default function SectionHeader({
         {title}
       </h2>
       {showMoreButton && (
-        <Button onClick={onMoreClick} size="sm" variant="ghost">
+        <Button
+          className="font-medium text-slate-400 transition-colors hover:bg-transparent hover:text-white"
+          onClick={onMoreClick}
+          size="sm"
+          variant="ghost"
+        >
           더보기
         </Button>
       )}
