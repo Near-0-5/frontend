@@ -1,0 +1,32 @@
+import { Button } from '@/components';
+
+type SectionHeaderProps = {
+  onMoreClick?: () => void;
+  showMoreButton?: boolean;
+  title: string;
+  titleClassName?: string;
+};
+
+export default function SectionHeader({
+  onMoreClick,
+  showMoreButton = true,
+  title,
+  titleClassName,
+}: SectionHeaderProps) {
+  return (
+    <div className="mb-4 flex items-center justify-between">
+      <h2
+        className={`text-lg font-semibold text-white md:text-xl ${
+          titleClassName ?? ''
+        }`}
+      >
+        {title}
+      </h2>
+      {showMoreButton && (
+        <Button onClick={onMoreClick} size="sm" variant="ghost">
+          더보기
+        </Button>
+      )}
+    </div>
+  );
+}

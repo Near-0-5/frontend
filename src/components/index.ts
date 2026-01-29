@@ -17,6 +17,7 @@ export { default as ModalTrigger } from './common/modal/ModalTrigger';
 //layout
 export { default as Header } from './layout/Header';
 export { default as MainLayout } from './layout/MainLayout';
+export { default as SectionHeader } from './layout/SectionHeader';
 export { default as Sidebar } from './layout/Sidebar';
 
 export { Button, buttonVariants } from './ui/Button';
