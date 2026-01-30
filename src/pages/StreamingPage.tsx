@@ -1,13 +1,17 @@
 import { MessageCircleMoreIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Button } from '@/components';
-import { StreamPlayerPlaceholder } from '@/features/live/components';
+import { StreamPlayer } from '@/features/live/components';
 import ChatPanel from '@/features/live/components/ChatPanel';
 import LoginRequiredModal from '@/features/live/components/LoginRequiredModal';
 
 export default function StreamingPage() {
   //임시 로그인 상태 (나중에 Auth 붙으면 여기만 교체)
+  const MOCK_PLAYBACK_URL =
+    'https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8';
+  const { id } = useParams();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(true);
@@ -21,12 +25,15 @@ export default function StreamingPage() {
     setIsLoginModalOpen(false);
   };
 
+  //추후에 수정 예정입니다
+  console.log(id);
+
   return (
     <main className="mx-auto max-w-main px-6 py-4 text-white">
       <section className="flex items-stretch gap-4">
         <div className="flex flex-1 flex-col gap-4">
           <div className="relative">
-            <StreamPlayerPlaceholder />
+            <StreamPlayer playbackUrl={MOCK_PLAYBACK_URL} />
             {!isChatOpen && (
               <Button
                 className="absolute top-2 right-2"

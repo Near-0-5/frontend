@@ -10,7 +10,7 @@ export const ROUTES_PATHS = {
   MYPAGE: '/my-page',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
-  STREAMING: '/live-stream',
+  STREAMING: '/live-stream/:id',
   STREAMING_LIST: '/stream-list',
 } as const;
 
