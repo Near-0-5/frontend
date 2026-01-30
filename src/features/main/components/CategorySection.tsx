@@ -40,12 +40,11 @@ export default function CategorySection({ title }: CategorySectionProps) {
                 type="button"
                 variant="navy"
               >
-                <div className="pointer-events-none absolute inset-px rounded-[11px] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_60%)] opacity-55 transition-opacity group-hover:opacity-0" />
-
+                <div className="pointer-events-none absolute inset-px rounded-[1px] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_60%)] opacity-55 transition-opacity group-hover:opacity-0" />
+                1
                 <div className="relative z-10 flex h-12 w-12 items-center justify-center text-white transition-colors group-hover:text-[#1A1F2E]">
                   <Icon className="h-full w-full" strokeWidth={1.8} />
                 </div>
-
                 <span className="relative z-10 text-sm font-bold tracking-wide text-white transition-colors group-hover:text-[#1A1F2E]">
                   {label}
                 </span>
