@@ -1,4 +1,4 @@
-import { Check, Plus } from 'lucide-react';
+import { Check as CheckIcon, Plus as PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
@@ -33,12 +33,12 @@ export function FollowButton({
     >
       {isFollowing ? (
         <>
-          <Check size={16} strokeWidth={2.5} />
+          <CheckIcon size={16} strokeWidth={2.5} />
           <span>팔로잉</span>
         </>
       ) : (
         <>
-          <Plus size={16} strokeWidth={2.5} />
+          <PlusIcon size={16} strokeWidth={2.5} />
           <span>팔로우</span>
         </>
       )}

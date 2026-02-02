@@ -1,4 +1,5 @@
 import { Button } from '@/components';
+import { cn } from '@/utils';
 
 type SectionHeaderProps = {
   onMoreClick?: () => void;
@@ -16,9 +17,10 @@ export default function SectionHeader({
   return (
     <div className="mb-4 flex items-center justify-between">
       <h2
-        className={`text-lg font-semibold text-white md:text-xl ${
-          titleClassName ?? ''
-        }`}
+        className={cn(
+          'text-lg font-semibold text-white md:text-xl',
+          titleClassName,
+        )}
       >
         {title}
       </h2>

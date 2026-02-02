@@ -1,3 +1,5 @@
+import type { LucideIcon } from 'lucide-react';
+
 import {
   Guitar as GuitarIcon,
   Mic as KpopIcon,
@@ -6,15 +8,14 @@ import {
   Mic2 as TrotIcon,
 } from 'lucide-react';
 
-import type { CategorySectionProps } from '@/types/domain';
-
 import { Button, SectionHeader } from '@/components';
 import { CATEGORIES } from '@/constants/mockData';
 
-const categoryIconMap: Record<
-  string,
-  React.FC<React.SVGProps<SVGSVGElement>>
-> = {
+export type CategorySectionProps = {
+  title: string;
+};
+
+const categoryIconMap: Record<string, LucideIcon> = {
   band: GuitarIcon,
   kpop: KpopIcon,
   musical: MusicalIcon,
