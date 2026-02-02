@@ -1,6 +1,12 @@
-import type { ConcertCardProps } from '@/types/domain';
-
 import { Button } from '@/components';
+
+export type ConcertCardProps = {
+  dateLabel: string;
+  locationLabel: string;
+  thumbnailUrl: string;
+  timeLabel: string;
+  title: string;
+};
 
 export default function ConcertCard({
   dateLabel,

@@ -1,7 +1,9 @@
-import type { ArtistSectionProps } from '@/features/main/types';
-
 import { SectionHeader } from '@/components';
 import { DUMMY_ARTISTS } from '@/constants/mockData';
+
+export type ArtistSectionProps = {
+  title: string;
+};
 
 export default function ArtistSection({ title }: ArtistSectionProps) {
   return (

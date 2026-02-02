@@ -1,7 +1,9 @@
-import type { InterestArtistSectionProps } from '@/features/main/types';
-
 import { Button, SectionHeader } from '@/components';
 import { INTEREST_ARTISTS } from '@/features/main/mocks/mainData';
+
+export type InterestArtistSectionProps = {
+  title: string;
+};
 
 export default function InterestArtistSection({
   title,

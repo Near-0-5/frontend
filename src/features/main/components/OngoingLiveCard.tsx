@@ -1,4 +1,9 @@
-import type { OngoingLiveCardProps } from '@/types/domain';
+export type OngoingLiveCardProps = {
+  durationLabel?: string;
+  isLive?: boolean;
+  thumbnailUrl: string;
+  title: string;
+};
 
 export default function OngoingLiveCard({
   durationLabel,
