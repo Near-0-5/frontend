@@ -25,4 +25,12 @@ export const API_ROUTES = {
     KAKAO_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Kakao`,
     NAVER_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Naver`,
   },
+  STREAMS: {
+    CREDENTIALS: (sessionId: number) =>
+      `/streams/sessions/${sessionId}/credentials`,
+    DETAIL: (sessionId: number) => `/streams/sessions/${sessionId}`,
+    LIST: `/streams/sessions`,
+    REFRESH: (sessionId: number) => `/streams/sessions/${sessionId}/refresh`,
+    STATUS: (sessionId: number) => `/streams/sessions/${sessionId}/status`,
+  },
 };
