@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
 
-type FollowButtonProps = {
+export type FollowButtonProps = {
   className?: string;
   initialIsFollowing?: boolean;
   onToggle?: (isFollowing: boolean) => void;
 };
 
-export function FollowButton({
+export default function FollowButton({
   className,
   initialIsFollowing = false,
   onToggle,

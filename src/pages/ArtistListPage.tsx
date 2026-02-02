@@ -1,4 +1,4 @@
-import { FollowButton } from '@/components/ui/FollowButton';
+import { FollowButton } from '@/components';
 import { DUMMY_ARTISTS } from '@/constants/mockData';
 import HeroBanner from '@/features/main/components/HeroBanner';
 

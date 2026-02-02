@@ -1,9 +1,24 @@
 import type {
   CategoryItem,
-  ConcertCardProps,
-  OngoingLiveCardProps,
   Artist as RecommendedArtistItem,
-} from '@/types/domain';
+} from '@/types/main';
+
+// 예정된 라이브용 로컬 타입
+type ConcertMock = {
+  dateLabel: string;
+  locationLabel: string;
+  thumbnailUrl: string;
+  timeLabel: string;
+  title: string;
+};
+
+// 진행 중 콘서트 라이브용 로컬 타입
+type OngoingLiveMock = {
+  durationLabel: string;
+  isLive?: boolean;
+  thumbnailUrl: string;
+  title: string;
+};
 
 // 추천 카테고리
 export const CATEGORIES: CategoryItem[] = [
@@ -43,7 +58,7 @@ export const DUMMY_ARTISTS: RecommendedArtistItem[] = [
 ];
 
 // 진행 중 콘서트 라이브
-export const DUMMY_ONGOING_LIVES: OngoingLiveCardProps[] = [
+export const DUMMY_ONGOING_LIVES: OngoingLiveMock[] = [
   {
     durationLabel: '1:20:45',
     isLive: true,
@@ -65,7 +80,7 @@ export const DUMMY_ONGOING_LIVES: OngoingLiveCardProps[] = [
 ];
 
 // 예정된 라이브
-export const DUMMY_CONCERTS: ConcertCardProps[] = [
+export const DUMMY_CONCERTS: ConcertMock[] = [
   {
     dateLabel: '2026.09.15',
     locationLabel: '올림픽공원 KSPO DOME',

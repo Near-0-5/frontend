@@ -6,12 +6,12 @@ export const ROUTES_PATHS = {
   FAVORITE: '/favorite',
   KAKAO_CALLBACK: '/auth/kakao/callback',
   LOGIN: '/login',
-  MAIN: '/',
+  MAIN: '/main',
   MYPAGE: '/mypage',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
   STREAMING: '/live-stream',
-  STREAMING_LIST: '/stream_list',
+  STREAMING_LIST: '/stream-list',
 } as const;
 
 export const API_ROUTES = {
