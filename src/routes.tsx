@@ -1,5 +1,11 @@
 import { ROUTES_PATHS } from '@/constants';
-import { KakaoCallback, LoginPage, MainPage, StreamingPage } from '@/pages';
+import {
+  KakaoCallback,
+  LoginPage,
+  MainPage,
+  MyPage,
+  StreamingPage,
+} from '@/pages';
 
 export const PUBLIC_ROUTES = [
   {
@@ -23,5 +29,9 @@ export const PROTECTED_ROUTES = [
   {
     element: <StreamingPage />,
     path: ROUTES_PATHS.STREAMING,
+  },
+  {
+    element: <MyPage />,
+    path: ROUTES_PATHS.MYPAGE,
   },
 ];
