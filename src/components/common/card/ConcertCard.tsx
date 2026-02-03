@@ -3,6 +3,7 @@ import { Button } from '@/components';
 export type ConcertCardProps = {
   dateLabel: string;
   locationLabel: string;
+  onClickAlert?: () => void;
   thumbnailUrl: string;
   timeLabel: string;
   title: string;
@@ -11,6 +12,7 @@ export type ConcertCardProps = {
 export default function ConcertCard({
   dateLabel,
   locationLabel,
+  onClickAlert,
   thumbnailUrl,
   timeLabel,
   title,
@@ -18,11 +20,13 @@ export default function ConcertCard({
   return (
     <article className="group flex h-90.75 flex-col overflow-hidden rounded-3xl border border-[#4A5565] bg-[#101828] transition-colors duration-200 hover:border-[#DC196D]">
       <div className="relative h-52.5 w-full overflow-hidden">
-        <img
-          alt={title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          src={thumbnailUrl}
-        />
+        {thumbnailUrl && (
+          <img
+            alt={title}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            src={thumbnailUrl}
+          />
+        )}
         <div className="absolute top-4 left-4 rounded-full bg-[#E11DFF] px-5 py-1.5 text-xs leading-none font-semibold text-white">
           {dateLabel}
         </div>
@@ -40,6 +44,7 @@ export default function ConcertCard({
         </h3>
         <Button
           className="mt-1 w-full justify-center gap-1 text-sm font-semibold"
+          onClick={onClickAlert}
           rounded="full"
           size="lg"
           variant="lightGrey"
