@@ -29,3 +29,17 @@ export const useStreamingListQuery = (status: StreamSessionStatus) =>
     },
     queryKey: ['streams', 'sessions', status],
   });
+
+export type StreamSessionDetail = StreamSession & {
+  description?: null | string;
+};
+
+export const useStreamingDetailQuery = (id: number) =>
+  useQuery<StreamSessionDetail>({
+    enabled: !!id,
+    queryFn: async () => {
+      const { data } = await api.get(`/api/v1/streams/sessions/${id}`);
+      return data;
+    },
+    queryKey: ['streams', 'session', id],
+  });

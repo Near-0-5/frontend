@@ -32,15 +32,16 @@ export const PUBLIC_ROUTES_WITH_LAYOUT = [
   },
   {
     element: <StreamListPage />,
-    path: ROUTES_PATHS.STREAMING_LIST, // '/stream-list'
+    path: ROUTES_PATHS.STREAMING_LIST,
   },
 ];
 
 export const PROTECTED_ROUTES = [
   {
     element: <StreamingPage />,
-    path: ROUTES_PATHS.STREAMING, // '/live-stream'
+    path: ROUTES_PATHS.STREAMING,
   },
+
   {
     element: <MyPage />,
     path: ROUTES_PATHS.MYPAGE,

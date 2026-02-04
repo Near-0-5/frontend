@@ -8,20 +8,48 @@ export type ArtistSectionProps = {
   title: string;
 };
 
+const MOCK_ARTISTS = [
+  {
+    id: 1,
+    name: 'LE SSERAFIM',
+    profile_image: '/images/artist-le-sserafim.png',
+  },
+  {
+    id: 2,
+    name: 'NewJeans',
+    profile_image: '/images/artist-newjeans.png',
+  },
+  {
+    id: 3,
+    name: 'BTS',
+    profile_image: '/images/artist-bts.png',
+  },
+];
+
 export default function ArtistSection({ title }: ArtistSectionProps) {
   const navigate = useNavigate();
 
   const { data, isError, isLoading, isSuccess } = useArtistListQuery();
-  const list = data?.items ?? [];
+  const rawList = data?.items ?? [];
+
+  const useMock = isError || !isSuccess || rawList.length === 0;
+
+  const list = useMock
+    ? MOCK_ARTISTS
+    : rawList.map(artist => ({
+        id: artist.id,
+        name: artist.name,
+        profile_image: artist.profile_image,
+      }));
 
   console.log('[ArtistSection] data =', data);
-  console.log('[ArtistSection] list.length =', list.length);
+  console.log('[ArtistSection] rawList.length =', rawList.length);
+  console.log('[ArtistSection] useMock =', useMock);
   console.log('[ArtistSection] isSuccess =', isSuccess);
   console.log('[ArtistSection] isError =', isError);
 
-  const isLoadingState = isLoading && !data;
-  const showEmptyMessage =
-    (isSuccess && list.length === 0) || (!isSuccess && !data);
+  const isLoadingState = isLoading && !data && !useMock;
+  const showEmptyMessage = !useMock && isSuccess && list.length === 0;
 
   const handleClickMore = () => {
     navigate(ROUTES_PATHS.ARTIST_LIST);
