@@ -21,6 +21,8 @@ export const API_ROUTES = {
     USER_ME: `/users/me`,
   },
   EXTERNAL: {
-    KAKAO_LOGIN: `${BACKEND_BASE_URL}/auth/kakao/login`,
+    GOOGLE_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Google`,
+    KAKAO_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Kakao`,
+    NAVER_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Naver`,
   },
 };
