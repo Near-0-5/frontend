@@ -10,6 +10,7 @@ import { useAuthStore } from '@/features/auth';
 import { useStreamingListQuery } from '@/queries/streaming';
 
 export type UpcomingStreamingSectionProps = {
+  showMoreButton?: boolean;
   title: string;
 };
 
@@ -20,27 +21,49 @@ const FALLBACK_THUMBNAILS = [
   '/images/Upcoming-4.png',
 ];
 
-const getFallbackThumbnail = (index: number) => {
-  const i = index % FALLBACK_THUMBNAILS.length;
-  return FALLBACK_THUMBNAILS[i];
-};
+const getFallbackThumbnail = (index: number) =>
+  FALLBACK_THUMBNAILS[index % FALLBACK_THUMBNAILS.length];
+
+const MOCK_UPCOMING_LIST = [
+  {
+    concert_title: 'LE SSERAFIM 2024 WORLD TOUR',
+    id: 1,
+    session_name: '서울 올림픽공원 KSPO DOME',
+    start_at: '2026-09-15 20:00 (KST)',
+    thumbnail_url: '/images/Upcoming-1.png',
+  },
+  {
+    concert_title: 'CRAZY 앨범 쇼케이스 라이브',
+    id: 2,
+    session_name: '서울 올림픽공원 KSPO DOME',
+    start_at: '2026-09-08 20:00 (KST)',
+    thumbnail_url: '/images/Upcoming-2.png',
+  },
+  {
+    concert_title: '팬사인회 생중계',
+    id: 3,
+    session_name: '광주 한국문화회관',
+    start_at: '2026-09-10 15:00 (KST)',
+    thumbnail_url: '/images/Upcoming-3.png',
+  },
+];
 
 export default function UpcomingStreamingSection({
+  showMoreButton = true,
   title,
 }: UpcomingStreamingSectionProps) {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
 
   const { data, isError, isSuccess } = useStreamingListQuery('READY');
-  const list = data?.items ?? [];
 
-  console.log('[UpcomingStreamingSection] data =', data);
-  console.log('[UpcomingStreamingSection] list.length =', list.length);
-  console.log('[UpcomingStreamingSection] isSuccess =', isSuccess);
-  console.log('[UpcomingStreamingSection] isError =', isError);
+  // API 리스트
+  const rawList = data?.items ?? [];
+  // 리스트가 비어 있으면 더미 데이터로 대체
+  const list = rawList.length === 0 ? MOCK_UPCOMING_LIST : rawList;
 
-  const showEmptyMessage =
-    (isSuccess && list.length === 0) || (!isSuccess && !data);
+  // 스크린샷용: 카드가 항상 보이게 빈 메시지는 에러일 때만 사용
+  const showEmptyMessage = isError && list.length === 0 && isSuccess;
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedConcertTitle, setSelectedConcertTitle] = useState<
@@ -72,7 +95,11 @@ export default function UpcomingStreamingSection({
   return (
     <section className="w-full px-6 py-10 md:px-10">
       <div className="mx-auto max-w-293 space-y-6">
-        <SectionHeader onMoreClick={handleClickMore} title={title} />
+        <SectionHeader
+          onMoreClick={handleClickMore}
+          showMoreButton={showMoreButton}
+          title={title}
+        />
 
         {showEmptyMessage ? (
           <div className="py-10 text-center text-gray-400">

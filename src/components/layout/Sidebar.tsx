@@ -35,15 +35,15 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     },
     {
       icon: Mic2Icon,
-      isActive: location.pathname === ROUTES_PATHS.ARTIST,
+      isActive: location.pathname === ROUTES_PATHS.ARTIST_LIST,
       label: 'Artist',
-      path: ROUTES_PATHS.ARTIST,
+      path: ROUTES_PATHS.ARTIST_LIST,
     },
     {
       icon: RadioIcon,
-      isActive: location.pathname === ROUTES_PATHS.STREAMING,
+      isActive: location.pathname === ROUTES_PATHS.STREAMING_LIST,
       label: 'Streaming',
-      path: ROUTES_PATHS.STREAMING,
+      path: ROUTES_PATHS.STREAMING_LIST,
     },
     {
       icon: HeartIcon,
