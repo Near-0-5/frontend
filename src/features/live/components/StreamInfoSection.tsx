@@ -9,6 +9,10 @@ type StreamInfoSectionProps = {
 export default function StreamInfoSection({
   streamDetail,
 }: StreamInfoSectionProps) {
+  const STREAM_START_DATE = `${new Date(streamDetail.startAt).toLocaleString()} 시작됨`;
+  const PROFILE_IMG = `${streamDetail.lineup[0].profileImgUrl}`;
+  const ARTIST_NAME = `${streamDetail.lineup[0]?.name || 'Unknown'}`;
+
   const tags = [
     streamDetail.category,
     streamDetail.lineup[0]?.agency || 'agency',
@@ -23,9 +27,7 @@ export default function StreamInfoSection({
           <span className="rounded bg-[#E7000B] px-2 py-0.5 text-xs font-bold text-[#ffffff]">
             {streamDetail.status}
           </span>
-          <span className="text-xs text-[#C9C9C9]">
-            {new Date(streamDetail.startAt).toLocaleString()} 시작됨
-          </span>
+          <span className="text-xs text-[#C9C9C9]">{STREAM_START_DATE}</span>
         </div>
 
         <h1 className="py-2 text-xl font-bold tracking-tight">
@@ -39,18 +41,16 @@ export default function StreamInfoSection({
 
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            {streamDetail.lineup[0]?.profileImgUrl ? (
+            {PROFILE_IMG ? (
               <img
                 alt="Profile"
                 className="h-10 w-10 rounded-full object-cover"
-                src={streamDetail.lineup[0].profileImgUrl}
+                src={PROFILE_IMG}
               />
             ) : (
               <div className="h-10 w-10 rounded-full bg-linear-to-tr from-pink-500 to-violet-500" />
             )}
-            <span className="text-sm font-semibold">
-              {streamDetail.lineup[0]?.name || 'Unknown'}
-            </span>
+            <span className="text-sm font-semibold">{ARTIST_NAME}</span>
           </div>
           <Button className="px-6" rounded="full" size="sm" variant="pink">
             팔로우

@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components';
 import { useLiveChat } from '@/features/live/hooks/useLiveChat';
+import { cn } from '@/utils';
 
 type ChatPanelProps = {
   isAuthenticated: boolean;
@@ -49,9 +50,12 @@ export default function ChatPanel({
             실시간 채팅
           </span>
           <span
-            className={`text-xs ${isConnected ? 'text-green-600' : 'text-red-500'}`}
+            className={cn(
+              'text-xs',
+              isConnected ? 'text-green-600' : 'text-red-500',
+            )}
           >
-            {isConnected ? '● 연결됨' : '● 연결 끊김'}
+            {isConnected ? '연결됨' : '연결 끊김'}
           </span>
         </div>
         {onClose && (

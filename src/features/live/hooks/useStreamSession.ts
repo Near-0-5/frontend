@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { STREAM_KEYS } from '@/constants/querykeys';
 import {
   getStreamCredentials,
   getStreamDetail,
@@ -9,7 +10,7 @@ export const useStreamSession = (sessionId: number) => {
   const detailQuery = useQuery({
     enabled: !!sessionId,
     queryFn: () => getStreamDetail(sessionId),
-    queryKey: ['streamDetail', sessionId],
+    queryKey: STREAM_KEYS.DETAIL(sessionId),
   });
 
   const streamDetail = detailQuery.data;
@@ -20,7 +21,7 @@ export const useStreamSession = (sessionId: number) => {
       const data = await getStreamCredentials(sessionId);
       return data.playbackUrl;
     },
-    queryKey: ['streamToken', sessionId],
+    queryKey: STREAM_KEYS.TOKEN(sessionId),
 
     refetchInterval: 1000 * 60 * 50,
 
@@ -28,6 +29,8 @@ export const useStreamSession = (sessionId: number) => {
   });
 
   return {
+    error: detailQuery.error || tokenQuery.error,
+    isError: detailQuery.isError || tokenQuery.isError,
     isLoading: detailQuery.isLoading || tokenQuery.isLoading,
     loadStreamSession: detailQuery.refetch,
     playbackUrl: tokenQuery.data || null,

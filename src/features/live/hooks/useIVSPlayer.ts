@@ -18,13 +18,13 @@ type UseIVSPlayerProps = {
 export const useIVSPlayer = ({ playbackUrl }: UseIVSPlayerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<null | Player>(null);
+  const PLAYER_CLASSES = ['vjs-big-play-centered', 'vjs-fluid'];
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const videoElement = document.createElement('video-js');
-    videoElement.classList.add('vjs-big-play-centered');
-    videoElement.classList.add('vjs-fluid');
+    videoElement.classList.add(...PLAYER_CLASSES);
 
     containerRef.current.appendChild(videoElement);
 
