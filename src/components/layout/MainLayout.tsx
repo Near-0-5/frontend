@@ -8,7 +8,7 @@ export default function MainLayout() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#1A1F2E]">
       <Header onMenuClick={() => setIsOpen(!isOpen)} />
 
       <div className="flex pt-15">

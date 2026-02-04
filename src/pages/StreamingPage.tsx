@@ -1,55 +1,85 @@
+import { MessageCircleMoreIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useParams } from 'react-router';
 
+import { Button } from '@/components';
 import {
-  StreamHeader,
-  StreamPlayerPlaceholder,
+  ChatPanel,
+  LoginRequiredModal,
+  StreamInfoSection,
+  StreamPlayer,
 } from '@/features/live/components';
-import ChatPanel from '@/features/live/components/ChatPanel';
-import LoginRequiredModal from '@/features/live/components/LoginRequiredModal';
+import { useStreamSession } from '@/features/live/hooks/useStreamSession';
 
 export default function StreamingPage() {
-  //임시 로그인 상태 (나중에 Auth 붙으면 여기만 교체)
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { id } = useParams<{ id: string }>();
+  const sessionId = Number(id);
 
+  const { playbackUrl, streamDetail } = useStreamSession(sessionId);
+
+  const [isChatOpen, setIsChatOpen] = useState(true);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const STREAM_MESSAGE = {
+    ENDED: '방송이 종료되었습니다.',
+    NONE: '상단 버튼을 눌러 로그인을 진행해주세요.',
+    READY: '방송 시작 전입니다.',
+  } as const;
 
-  const handleRequireLogin = () => {
-    setIsLoginModalOpen(true);
+  const handleRequireLogin = () => setIsLoginModalOpen(true);
+  const handleCloseModal = () => setIsLoginModalOpen(false);
+
+  const getStreamMessage = () => {
+    if (!streamDetail) return STREAM_MESSAGE.NONE;
+    return STREAM_MESSAGE[streamDetail.status] ?? STREAM_MESSAGE.ENDED;
   };
 
-  const handleCloseModal = () => {
-    setIsLoginModalOpen(false);
-  };
-
-  // 임시 로그인 처리 (실제 로그인 연동 전까지는 버튼 or 테스트용)
-  const handleMockLogin = () => {
-    setIsAuthenticated(true);
-    setIsLoginModalOpen(false);
-  };
+  const isStreamLive = streamDetail?.status === 'LIVE' && playbackUrl;
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-4">
-      <StreamHeader />
+    <main className="mx-auto max-w-main px-6 py-4 text-white">
+      <section className="flex items-stretch gap-4">
+        <div className="flex flex-1 flex-col gap-4">
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
+            {isStreamLive ? (
+              <StreamPlayer playbackUrl={playbackUrl} />
+            ) : (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gray-900 text-gray-400">
+                <p>{getStreamMessage()}</p>
+              </div>
+            )}
 
-      <section className="mt-4 grid grid-cols-12 gap-4">
-        <div className="col-span-8">
-          <StreamPlayerPlaceholder />
+            {!isChatOpen && (
+              <Button
+                className="absolute top-2 right-2 z-10"
+                onClick={() => setIsChatOpen(true)}
+                size="icon"
+                variant="ghost"
+              >
+                <MessageCircleMoreIcon />
+              </Button>
+            )}
+          </div>
+
+          {streamDetail && <StreamInfoSection streamDetail={streamDetail} />}
         </div>
 
-        <div className="col-span-4">
-          <ChatPanel
-            isAuthenticated={isAuthenticated}
-            onRequireLogin={handleRequireLogin}
-            roomId="123"
-            streamingId={1}
-          />
-        </div>
+        {isChatOpen && (
+          <div className="w-sm shrink-0">
+            <ChatPanel
+              isAuthenticated={!!streamDetail}
+              onClose={() => setIsChatOpen(false)}
+              onRequireLogin={handleRequireLogin}
+              roomId={String(sessionId)}
+              streamingId={sessionId}
+            />
+          </div>
+        )}
       </section>
 
       <LoginRequiredModal
         isOpen={isLoginModalOpen}
         onClose={handleCloseModal}
-        onConfirm={handleMockLogin} // 임시 로그인 액션
+        onConfirm={() => setIsLoginModalOpen(false)}
       />
     </main>
   );

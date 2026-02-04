@@ -3,5 +3,7 @@
   "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "tailwindCSS.lint.invalidApply": "error",
-  "tailwindCSS.lint.recommendedVariantOrder": "warning"
+  "tailwindCSS.lint.recommendedVariantOrder": "warning",
+  "css.customData": [".vscode/css-custom-data.json"],
+  "css.lint.unknownAtRules": "ignore"
 }

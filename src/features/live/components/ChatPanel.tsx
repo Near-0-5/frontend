@@ -1,10 +1,13 @@
+import { XIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components';
 import { useLiveChat } from '@/features/live/hooks/useLiveChat';
+import { cn } from '@/utils';
 
 type ChatPanelProps = {
   isAuthenticated: boolean;
+  onClose: () => void;
   onRequireLogin: () => void;
   roomId: string;
   streamingId: number;
@@ -12,6 +15,7 @@ type ChatPanelProps = {
 
 export default function ChatPanel({
   isAuthenticated,
+  onClose,
   onRequireLogin,
   roomId,
   streamingId,
@@ -41,18 +45,32 @@ export default function ChatPanel({
     <section className="flex h-full flex-col rounded-xl border border-gray-200 bg-white">
       {/* Header */}
       <header className="flex items-center justify-between border-b px-4 py-3">
-        <span className="text-sm font-semibold text-gray-900">실시간 채팅</span>
-
-        <span
-          className={`text-xs ${
-            isConnected ? 'text-green-600' : 'text-red-500'
-          }`}
-        >
-          {isConnected ? '연결됨' : '연결 끊김'}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-base font-semibold text-gray-900">
+            실시간 채팅
+          </span>
+          <span
+            className={cn(
+              'text-xs',
+              isConnected ? 'text-green-600' : 'text-red-500',
+            )}
+          >
+            {isConnected ? '연결됨' : '연결 끊김'}
+          </span>
+        </div>
+        {onClose && (
+          <Button
+            aria-label="채팅창 닫기"
+            className="p-1 text-lg text-gray-400 hover:text-gray-600"
+            onClick={onClose}
+            size="icon"
+            variant="ghost"
+          >
+            <XIcon />
+          </Button>
+        )}
       </header>
 
-      {/* Messages */}
       <ul className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
         {messages.map(message => {
           const isSystem = message.kind === 'system';

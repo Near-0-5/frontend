@@ -10,7 +10,7 @@ export const ROUTES_PATHS = {
   MYPAGE: '/my-page',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
-  STREAMING: '/live-stream',
+  STREAMING: '/live-stream/:id',
   STREAMING_LIST: '/stream-list',
 } as const;
 
@@ -24,5 +24,13 @@ export const API_ROUTES = {
     GOOGLE_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Google`,
     KAKAO_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Kakao`,
     NAVER_LOGIN: `${BACKEND_BASE_URL}/auth/login?provider=Naver`,
+  },
+  STREAMS: {
+    CREDENTIALS: (sessionId: number) =>
+      `/streams/sessions/${sessionId}/credentials`,
+    DETAIL: (sessionId: number) => `/streams/sessions/${sessionId}`,
+    LIST: `/streams/sessions`,
+    REFRESH: (sessionId: number) => `/streams/sessions/${sessionId}/refresh`,
+    STATUS: (sessionId: number) => `/streams/sessions/${sessionId}/status`,
   },
 };
