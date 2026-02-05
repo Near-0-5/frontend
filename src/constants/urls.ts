@@ -10,7 +10,7 @@ export const ROUTES_PATHS = {
   FAVORITE: '/favorite',
   LOGIN: '/login',
   MAIN: '/',
-  MYPAGE: '/mypage',
+  MYPAGE: '/my-page',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
   SOCIAL_LOGIN_REDIRECT: '/auth/oauth2/callback',
