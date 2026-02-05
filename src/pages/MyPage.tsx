@@ -4,6 +4,11 @@ import { useNavigate, useSearchParams } from 'react-router';
 
 import type { MyPageMenuKey } from '@/features/my-page/types/menu';
 
+import {
+  getUserProfile,
+  updateUserProfile,
+  type UserProfile,
+} from '@/api/myPageApi';
 import { ROUTES_PATHS } from '@/constants';
 import { useAuthStore } from '@/features/auth';
 import { deleteUserAccount } from '@/features/auth/api/authApi';
@@ -21,6 +26,8 @@ import { favoriteGenresData } from '@/features/my-page/mocks/favoriteGenresData'
 
 export default function MyPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [profile, setProfile] = useState<null | UserProfile>(null);
   const navigate = useNavigate();
   const clearAccessToken = useAuthStore(state => state.clearAccessToken);
   /**
@@ -36,18 +43,25 @@ export default function MyPage() {
     tabParam ?? 'interest',
   );
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getUserProfile();
+        setProfile(data);
+      } catch (error) {
+        console.error('에러 :', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   /**
    * TODO:
    * - 유저 정보 API 연동
    * - 프로필 수정 API 성공 시 서버 응답 기준으로 갱신
    */
-  const [profile, setProfile] = useState({
-    description: '자기소개글이 올 자리입니다',
-    followerCount: 4,
-    userName: '김지우',
-  }); // 프로필 정보(임시 데이터)
 
-  const [profileImage, setProfileImage] = useState<null | string>(null); //프로필 이미지 url
+  //프로필 이미지 url
 
   const { mutate: withdraw } = useMutation({
     mutationFn: deleteUserAccount,
@@ -86,11 +100,6 @@ export default function MyPage() {
     }
   };
 
-  const handleImageChange = (file: File) => {
-    const imageUrl = URL.createObjectURL(file);
-    setProfileImage(imageUrl);
-  };
-
   /**
    * 탭 변경 핸들러
    *
@@ -110,15 +119,23 @@ export default function MyPage() {
    * - 프로필 수정 API 연동
    * - 닉네임 중복 시 에러 처리
    */
-  const handleEditProfile = (next: {
+  const handleEditProfile = async (next: {
     description?: string;
     userName: string;
   }) => {
-    setProfile(prev => ({
-      ...prev,
-      description: next.description,
-      userName: next.userName,
-    }));
+    // console.log('수정 시작:', next);
+    try {
+      const updatedProfile = await updateUserProfile({
+        bio: next.description,
+        nickname: next.userName,
+        notification_settings: profile?.notification_settings,
+        updated_at: new Date().toISOString(),
+      });
+      // console.log('수정 성공:', updatedProfile);
+      setProfile(updatedProfile);
+    } catch (error) {
+      console.error('프로필 수정 실패: ', error);
+    }
   };
 
   return (
@@ -130,11 +147,10 @@ export default function MyPage() {
       <section className="bg-linear-to-r from-[#DC196D] to-[#63002B]">
         <div className="mx-auto max-w-7xl px-12 py-10">
           <ProfileSummary
-            description={profile.description}
-            followerCount={profile.followerCount}
-            onImageChange={handleImageChange}
-            profileImage={profileImage}
-            userName={profile.userName}
+            description={profile?.bio}
+            followerCount={4}
+            profileImage={profile?.profile_img_url}
+            userName={profile?.nickname}
           />
         </div>
       </section>
@@ -168,15 +184,17 @@ export default function MyPage() {
                 - 계정 정보 API 연동
             */}
             <div className="rounded-2xl bg-[#1A1F2E] p-8">
-              <AccountInfoCard
-                accountInfo={{
-                  email: 'jiwoo.kim@example.com',
-                  joinedAt: '2024년 1월 15일',
-                  nickname: profile.userName,
-                }}
-                description={profile.description}
-                onEditProfile={handleEditProfile}
-              />
+              {profile && (
+                <AccountInfoCard
+                  accountInfo={{
+                    email: profile.email,
+                    joinedAt: profile.created_at,
+                    nickname: profile.nickname,
+                  }}
+                  description={profile.bio}
+                  onEditProfile={handleEditProfile}
+                />
+              )}
             </div>
             {/* TODO:
                 - 알림 설정 조회 API
