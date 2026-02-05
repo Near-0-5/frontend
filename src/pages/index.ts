@@ -5,3 +5,4 @@ export { default as MyPage } from './MyPage';
 export { default as NotFound } from './NotFound';
 export { default as SocialLoginRedirect } from './SocialLoginRedirect';
 export { default as StreamingPage } from './StreamingPage';
+export { default as StreamListPage } from './StreamListPage';

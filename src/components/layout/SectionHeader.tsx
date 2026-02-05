@@ -1,3 +1,4 @@
+// src/components/layout/SectionHeader.tsx
 import { Button } from '@/components';
 import { cn } from '@/utils';
 
@@ -24,6 +25,7 @@ export default function SectionHeader({
       >
         {title}
       </h2>
+
       {showMoreButton && (
         <Button
           className="font-medium text-slate-400 transition-colors hover:bg-transparent hover:text-white"

@@ -14,7 +14,8 @@ export const ROUTES_PATHS = {
   NOT_FOUND: '*',
   SIGNUP: '/signup',
   SOCIAL_LOGIN_REDIRECT: '/auth/oauth2/callback',
-  STREAMING: '/live-stream/:id',
+  STREAMING: '/live-stream',
+  STREAMING_DETAIL: '/live-stream/:id',
   STREAMING_LIST: '/stream-list',
 } as const;
 

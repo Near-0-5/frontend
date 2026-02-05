@@ -14,13 +14,14 @@ import App from './App.tsx';
 
 const queryClient = new QueryClient();
 
-// Axios Interceptor 설정 (순환 참조 해결을 위해 분리)
 setupAxiosInterceptors({
   ...useAuthStore.getState(),
   getAccessToken: () => useAuthStore.getState().accessToken,
 });
 
 async function enableMocking() {
+  return;
+
   if (process.env.NODE_ENV !== 'development') {
     return;
   }

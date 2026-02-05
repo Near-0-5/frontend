@@ -29,3 +29,5 @@ export * from './ui/DropdownMenu';
 export { Input } from './ui/Input';
 export { Loading } from './ui/Loading';
 export { Toaster } from './ui/Sonner';
+
+export { default as Tabs } from '@/components/common/Tabs';

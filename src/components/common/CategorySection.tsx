@@ -7,9 +7,18 @@ import {
   Sparkles as MusicalIcon,
   Mic2 as TrotIcon,
 } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Button, SectionHeader } from '@/components';
+import { ROUTES_PATHS } from '@/constants';
 import { CATEGORIES } from '@/constants/mockData';
+import { useAuthStore } from '@/features/auth';
+import { useCategoriesQuery } from '@/features/main/hooks/useCategoriesQuery';
+import {
+  useAddPreferredCategoryMutation,
+  useDeletePreferredCategoryMutation,
+} from '@/features/main/hooks/usePreferredCategoryMutations';
 
 export type CategorySectionProps = {
   title: string;
@@ -23,20 +32,94 @@ const categoryIconMap: Record<string, LucideIcon> = {
   trot: TrotIcon,
 };
 
+type UiCategory = {
+  categoryId: string;
+  id: string;
+  label: string;
+};
+
 export default function CategorySection({ title }: CategorySectionProps) {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+
+  const { data, isError } = useCategoriesQuery();
+  const { mutate: addPreferred } = useAddPreferredCategoryMutation();
+  const { mutate: deletePreferred } = useDeletePreferredCategoryMutation();
+
+  const apiCategories: UiCategory[] =
+    data?.categories.map(category => {
+      const normalized = category.name.toLowerCase();
+
+      const iconKey =
+        normalized.includes('k-pop') || normalized.includes('kpop')
+          ? 'kpop'
+          : normalized.includes('band')
+            ? 'band'
+            : normalized.includes('musical')
+              ? 'musical'
+              : normalized.includes('trot')
+                ? 'trot'
+                : 'kpop';
+
+      return {
+        categoryId: category.id,
+        id: iconKey,
+        label: category.name,
+      };
+    }) ?? [];
+
+  const useMock = isError || apiCategories.length === 0;
+
+  const categories: UiCategory[] = useMock
+    ? CATEGORIES.map(({ id, label }) => ({
+        categoryId: id,
+        id,
+        label,
+      }))
+    : apiCategories;
+
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const toggleCategory = (categoryId: string) => {
+    if (!isLoggedIn) {
+      navigate(ROUTES_PATHS.LOGIN);
+      return;
+    }
+
+    setSelected(prev => {
+      const next = new Set(prev);
+
+      if (next.has(categoryId)) {
+        next.delete(categoryId);
+        deletePreferred({ categoryId }); // DeletePreferredCategoryParams
+      } else {
+        next.add(categoryId);
+        addPreferred({ categoryId }); // AddPreferredCategoryRequest (camelCase)
+      }
+
+      return next;
+    });
+  };
+
   return (
     <section className="w-full px-6 pb-10 md:px-10">
       <div className="mx-auto max-w-293 space-y-3">
         <SectionHeader title={title} />
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {CATEGORIES.map(({ id, label }) => {
+          {categories.map(({ categoryId, id, label }) => {
             const Icon = categoryIconMap[id] ?? KpopIcon;
+            const isSelected = selected.has(categoryId);
 
             return (
               <Button
-                className="group relative flex w-full flex-col items-center justify-center gap-3 rounded-[14px] border-[3px] border-[#4A5565] bg-[#1A1F2E] py-8 shadow-[0_12px_24px_rgba(0,0,0,0.45)] transition-all duration-150 hover:-translate-y-1 hover:scale-[1.02] hover:border-[#F3F4F6] hover:bg-[#BCBCBC] hover:shadow-[0_18px_32px_rgba(0,0,0,0.6)]"
-                key={id}
+                className={`group relative flex w-full flex-col items-center justify-center gap-3 rounded-[14px] border-[3px] py-8 shadow-[0_12px_24px_rgba(0,0,0,0.45)] transition-all duration-150 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_18px_32px_rgba(0,0,0,0.6)] ${
+                  isSelected
+                    ? 'border-[#F3F4F6] bg-[#BCBCBC]'
+                    : 'border-[#4A5565] bg-[#1A1F2E]'
+                } `}
+                key={categoryId}
+                onClick={() => toggleCategory(categoryId)}
                 size="chip"
                 type="button"
                 variant="navy"

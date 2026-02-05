@@ -1,49 +1,130 @@
-import { Button } from '@/components';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
-export default function HeroBanner() {
-  const data = {
-    backgroundImageUrl: '', // TODO: image 폴더 추가 후 경로 설정
-    primaryActionLabel: '알림 신청하기',
-    statusLabel: 'UPCOMING CONCERT',
-    subtitle: 'From KickFlip, To WE:Flip',
-    title: '2026 KickFlip FAN-CON',
+import { Button } from '@/components';
+import Modal from '@/components/common/modal/Modal';
+import ModalContent from '@/components/common/modal/ModalContent';
+import ModalFooter from '@/components/common/modal/ModalFooter';
+import { ROUTES_PATHS } from '@/constants';
+import { useAuthStore } from '@/features/auth';
+
+type HeroBannerProps = {
+  concert?: {
+    concert_title: string;
+    session_name: string;
+    start_at: string;
+    thumbnail_url?: string;
+  };
+};
+
+const FALLBACK_DATA = {
+  backgroundImageUrl: '/images/hero-banner.png',
+  primaryActionLabel: '알림 신청하기',
+  statusLabel: 'Upcoming Concert',
+  subtitle: 'From KickFlip, To WE:Flip',
+  title: '2026 KickFlip FAN-CON',
+};
+
+export default function HeroBanner({ concert }: HeroBannerProps) {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  const data = concert
+    ? {
+        backgroundImageUrl:
+          concert.thumbnail_url || FALLBACK_DATA.backgroundImageUrl,
+        primaryActionLabel: FALLBACK_DATA.primaryActionLabel,
+        statusLabel: FALLBACK_DATA.statusLabel,
+        subtitle: concert.session_name || FALLBACK_DATA.subtitle,
+        title: concert.concert_title,
+      }
+    : FALLBACK_DATA;
+
+  const handleClickAlert = () => {
+    if (!isLoggedIn) {
+      navigate(ROUTES_PATHS.LOGIN);
+      return;
+    }
+    setIsAlertOpen(true);
+  };
+
+  const handleCloseAlert = (isOpen: boolean) => {
+    setIsAlertOpen(isOpen);
+  };
+
+  const handleSubmitAlert = () => {
+    setIsAlertOpen(false);
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-background">
-      <div className="absolute inset-0">
-        <img
-          alt={data.title}
-          className="h-full w-full object-cover"
-          src={data.backgroundImageUrl}
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-background/10 via-background/40 to-background/95" />
-      </div>
-      <div className="relative flex min-h-90 flex-col justify-end px-8 pt-16 pb-10 md:min-h-105">
-        <div className="max-w-xl space-y-4 text-left text-primary-foreground">
-          <span className="bg-navy-500/90 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase shadow-sm">
-            {data.statusLabel}
-          </span>
-          <div className="space-y-2">
-            <h1 className="text-3xl leading-tight font-semibold md:text-4xl lg:text-5xl">
-              {data.title}
-            </h1>
-            <p className="text-sm text-muted-foreground md:text-base">
-              {data.subtitle}
-            </p>
-          </div>
-          <div className="mt-4">
-            <Button
-              className="min-w-37.75"
-              rounded="full"
-              size="lg"
-              variant="navy"
-            >
-              {data.primaryActionLabel}
-            </Button>
+    <>
+      <section className="relative h-[55vh] min-h-72 w-full overflow-hidden border-0 bg-background md:h-[60vh] md:min-h-80 lg:h-[70vh] lg:max-h-180">
+        <div className="absolute inset-0">
+          <img
+            alt={data.title}
+            className="h-full w-full object-cover object-center"
+            src={data.backgroundImageUrl}
+          />
+
+          <div className="absolute inset-0 bg-linear-to-t from-[#111322] via-[#111322]/10 to-transparent" />
+
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+        </div>
+
+        <div className="relative flex h-full items-end px-6 pb-10 md:px-16 md:pb-16">
+          <div className="max-w-xl space-y-5 text-left text-white">
+            <span className="inline-flex items-center rounded-full bg-black/60 px-4 py-1.5 text-[10px] font-semibold tracking-wide uppercase md:text-xs">
+              {data.statusLabel}
+            </span>
+
+            <div className="space-y-2 md:space-y-3">
+              <h1 className="text-2xl leading-tight font-bold md:text-4xl lg:text-5xl">
+                {data.title}
+              </h1>
+              <p className="text-xs text-white/80 md:text-sm">
+                〈{data.subtitle}〉
+              </p>
+            </div>
+
+            <div className="pt-1.5">
+              <Button
+                className="h-10 min-w-40 px-5 text-xs font-semibold md:h-12 md:min-w-45 md:px-6 md:text-sm"
+                onClick={handleClickAlert}
+                rounded="full"
+                size="lg"
+                variant="navy"
+              >
+                {data.primaryActionLabel}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {isAlertOpen && (
+        <Modal isOpen={isAlertOpen} onOpenChange={handleCloseAlert}>
+          <ModalContent>
+            "{data.title}" 공연의 알림을 신청하시겠어요?
+            <ModalFooter>
+              <button
+                className="rounded-md bg-gray-700 px-4 py-2 text-sm text-white"
+                onClick={() => setIsAlertOpen(false)}
+                type="button"
+              >
+                닫기
+              </button>
+              <button
+                className="rounded-md bg-primary px-4 py-2 text-sm text-white"
+                onClick={handleSubmitAlert}
+                type="button"
+              >
+                신청하기
+              </button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
+    </>
   );
 }

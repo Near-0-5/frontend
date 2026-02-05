@@ -18,27 +18,34 @@ export default function FollowButton({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
 
   const handleToggle = () => {
-    const newState = !isFollowing;
-    setIsFollowing(newState);
-    onToggle?.(newState);
+    const next = !isFollowing;
+    setIsFollowing(next);
+    onToggle?.(next);
   };
 
   return (
     <Button
-      className={cn('w-full font-bold tracking-[-0.015em]', className)}
+      className={cn(
+        'inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-medium',
+        isFollowing
+          ? 'border-[#DC196D] bg-[#DC196D]/10 text-[#DC196D]'
+          : 'border-[#9CA3AF] bg-transparent text-[#E5E7EB] hover:border-white',
+        className,
+      )}
       onClick={handleToggle}
       rounded="full"
-      size="default"
-      variant={isFollowing ? 'navy' : 'lightGrey'}
+      size="sm"
+      type="button"
+      variant="ghost"
     >
       {isFollowing ? (
         <>
-          <CheckIcon size={16} strokeWidth={2.5} />
+          <CheckIcon size={14} strokeWidth={2.2} />
           <span>팔로잉</span>
         </>
       ) : (
         <>
-          <PlusIcon size={16} strokeWidth={2.5} />
+          <PlusIcon size={14} strokeWidth={2.2} />
           <span>팔로우</span>
         </>
       )}
