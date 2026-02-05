@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router';
 
-import { KakaoIcon, NaverIcon } from '@/assets';
+import { GoogleIcon, KakaoIcon, NaverIcon } from '@/assets';
 import { Button } from '@/components';
 import { API_ROUTES } from '@/constants';
 import {
@@ -12,12 +12,17 @@ import {
 import { cn } from '@/utils';
 
 const SOCIAL_LOGIN_CONFIG = {
-  Kakao: {
+  google: {
+    className: 'bg-white text-[#1F1F1F] hover:bg-[#E8E8E8]',
+    icon: <GoogleIcon />,
+    text: '구글 간편 로그인',
+  },
+  kakao: {
     className: 'bg-[#fee500] text-black hover:bg-[#f5dc00]',
     icon: <KakaoIcon />,
     text: '카카오 간편 로그인',
   },
-  Naver: {
+  naver: {
     className: 'bg-[#03C75A] text-white hover:bg-[#02b351]',
     icon: <NaverIcon />,
     text: '네이버 간편 로그인',
@@ -46,7 +51,7 @@ function SocialLoginButtons() {
 
         return (
           <Button
-            className={cn('h-13 border-none', config.className)}
+            className={cn('h-13 cursor-pointer border-none', config.className)}
             key={provider}
             onClick={() => handleLogin(provider)}
           >

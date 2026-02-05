@@ -1,6 +1,7 @@
 export type AuthState = {
   accessToken: null | string;
   clearAccessToken: () => void;
+  initializeAuth: () => Promise<void>;
   isLoggedIn: () => boolean;
   logout: () => Promise<void>;
   refreshAccessToken: () => Promise<null | string>;

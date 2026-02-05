@@ -12,21 +12,17 @@ import {
 } from '@/routes';
 
 function App() {
-  const { accessToken, refreshAccessToken } = useAuthStore();
+  const { initializeAuth } = useAuthStore();
   const [isInitializing, setIsInitializing] = useState(true);
 
-  //새로고침시 토큰 복구
   useEffect(() => {
     const initAuth = async () => {
-      if (!accessToken) {
-        await refreshAccessToken();
-      }
+      await initializeAuth();
       setIsInitializing(false);
     };
 
     initAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initializeAuth]);
 
   if (isInitializing) {
     return null;

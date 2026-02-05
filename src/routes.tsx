@@ -1,6 +1,11 @@
 import { ROUTES_PATHS } from '@/constants';
-import { LoginPage, MainPage, MyPage, StreamingPage } from '@/pages';
-import SocialLoginCallback from '@/pages/SocialLoginCallback';
+import {
+  LoginPage,
+  MainPage,
+  MyPage,
+  SocialLoginRedirect,
+  StreamingPage,
+} from '@/pages';
 
 export const PUBLIC_ROUTES = [
   {
@@ -8,8 +13,8 @@ export const PUBLIC_ROUTES = [
     path: ROUTES_PATHS.LOGIN,
   },
   {
-    element: <SocialLoginCallback />,
-    path: ROUTES_PATHS.SOCIAL_LOGIN_CALLBACK,
+    element: <SocialLoginRedirect />,
+    path: ROUTES_PATHS.SOCIAL_LOGIN_REDIRECT,
   },
 ];
 

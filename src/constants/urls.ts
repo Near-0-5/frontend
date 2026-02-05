@@ -1,5 +1,7 @@
 import type { SocialLoginProvider } from '@/features/auth';
 
+import { capitalize } from '@/utils';
+
 export const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export const ROUTES_PATHS = {
@@ -11,7 +13,7 @@ export const ROUTES_PATHS = {
   MYPAGE: '/my-page',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
-  SOCIAL_LOGIN_CALLBACK: '/auth/:provider/callback',
+  SOCIAL_LOGIN_REDIRECT: '/auth/oauth2/callback',
   STREAMING: '/live-stream/:id',
   STREAMING_LIST: '/stream-list',
 } as const;
@@ -20,8 +22,11 @@ export const API_ROUTES = {
   AUTH: {
     LOGOUT: `/auth/logout`,
     REFRESH_ACCESS_TOKEN: `/auth/refresh`,
-    SOCIAL_LOGIN_CALLBACK: (provider: SocialLoginProvider) =>
-      `${BACKEND_BASE_URL}/auth/login?provider=${provider}`,
+    SOCIAL_LOGIN_CALLBACK: (provider: SocialLoginProvider) => {
+      const capitalizedProvider = capitalize(provider);
+
+      return `${BACKEND_BASE_URL}/auth/login?provider=${capitalizedProvider}`;
+    },
     USER_ME: `/users/me`,
   },
   STREAMS: {

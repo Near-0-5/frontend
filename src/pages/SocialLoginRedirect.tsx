@@ -1,34 +1,20 @@
 import { useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { ROUTES_PATHS } from '@/constants';
-import {
-  isValidSocialLoginProvider,
-  REDIRECT_KEY,
-  useAuthStore,
-} from '@/features/auth';
+import { REDIRECT_KEY, useAuthStore } from '@/features/auth';
 
 const SEARCH_PARAMS = {
   ACCESS_TOKEN: 'access_token',
   IS_NEW_USER: 'is_new_user',
 };
 
-function SocialLoginCallback() {
+function SocialLoginRedirect() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const setAccessToken = useAuthStore(state => state.setAccessToken);
-  const { provider } = useParams<{
-    provider: string;
-  }>();
 
   useEffect(() => {
-    if (!isValidSocialLoginProvider(provider)) {
-      console.error(`잘못된 소셜 로그인 제공자입니다: ${provider}`);
-      navigate(ROUTES_PATHS.LOGIN, { replace: true });
-
-      return;
-    }
-
     const accessToken = searchParams.get(SEARCH_PARAMS.ACCESS_TOKEN);
 
     if (accessToken) {
@@ -49,7 +35,7 @@ function SocialLoginCallback() {
 
       navigate(ROUTES_PATHS.LOGIN, { replace: true });
     }
-  }, [searchParams, navigate, setAccessToken, provider]);
+  }, [searchParams, navigate, setAccessToken]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#070913]">
@@ -61,4 +47,4 @@ function SocialLoginCallback() {
   );
 }
 
-export default SocialLoginCallback;
+export default SocialLoginRedirect;
