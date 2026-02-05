@@ -3,4 +3,3 @@ export * from './components/SocialLoginButtons';
 export * from './constants/login';
 export * from './store/authStore';
 export * from './types/authTypes';
-export * from './utils/auth';

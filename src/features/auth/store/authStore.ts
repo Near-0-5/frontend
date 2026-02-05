@@ -5,7 +5,7 @@ import { create } from 'zustand';
 import type { AuthState } from '@/features/auth/types/authTypes';
 
 import { refreshApi } from '@/api';
-import { API_ROUTES } from '@/constants';
+import { API_ROUTES, LOCAL_STORAGE_KEYS } from '@/constants';
 
 const isAuthExpectedError = (error: unknown) => {
   const status = (error as AxiosError | undefined)?.response?.status;
@@ -25,6 +25,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } finally {
       set({ accessToken: null });
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.IS_LOGGED_IN);
     }
   },
   refreshAccessToken: async () => {

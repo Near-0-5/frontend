@@ -11,7 +11,7 @@ export const ROUTES_PATHS = {
   MYPAGE: '/my-page',
   NOT_FOUND: '*',
   SIGNUP: '/signup',
-  SOCIAL_LOGIN_CALLBACK: '/auth/:provider/callback',
+  SOCIAL_LOGIN_REDIRECT: '/auth/oauth2/callback',
   STREAMING: '/live-stream/:id',
   STREAMING_LIST: '/stream-list',
 } as const;
@@ -20,8 +20,12 @@ export const API_ROUTES = {
   AUTH: {
     LOGOUT: `/auth/logout`,
     REFRESH_ACCESS_TOKEN: `/auth/refresh`,
-    SOCIAL_LOGIN_CALLBACK: (provider: SocialLoginProvider) =>
-      `${BACKEND_BASE_URL}/auth/login?provider=${provider}`,
+    SOCIAL_LOGIN_CALLBACK: (provider: SocialLoginProvider) => {
+      const capitalizedProvider =
+        provider.charAt(0).toUpperCase() + provider.slice(1);
+
+      return `${BACKEND_BASE_URL}/auth/login?provider=${capitalizedProvider}`;
+    },
     USER_ME: `/users/me`,
   },
   STREAMS: {
