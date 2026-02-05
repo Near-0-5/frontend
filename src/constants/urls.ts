@@ -1,5 +1,7 @@
 import type { SocialLoginProvider } from '@/features/auth';
 
+import { capitalize } from '@/utils';
+
 export const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export const ROUTES_PATHS = {
@@ -21,8 +23,7 @@ export const API_ROUTES = {
     LOGOUT: `/auth/logout`,
     REFRESH_ACCESS_TOKEN: `/auth/refresh`,
     SOCIAL_LOGIN_CALLBACK: (provider: SocialLoginProvider) => {
-      const capitalizedProvider =
-        provider.charAt(0).toUpperCase() + provider.slice(1);
+      const capitalizedProvider = capitalize(provider);
 
       return `${BACKEND_BASE_URL}/auth/login?provider=${capitalizedProvider}`;
     },

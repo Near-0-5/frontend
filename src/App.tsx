@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 
 import { MainLayout } from '@/components';
-import { LOCAL_STORAGE_KEYS, ROUTES_PATHS } from '@/constants';
+import { ROUTES_PATHS } from '@/constants';
 import { ProtectedRoute, useAuthStore } from '@/features/auth';
 import { NotFound } from '@/pages';
 import {
@@ -11,45 +11,18 @@ import {
   PUBLIC_ROUTES_WITH_LAYOUT,
 } from '@/routes';
 
-const parseIsLoggedIn = (value: null | string) => value === 'true';
-
 function App() {
-  const { accessToken, refreshAccessToken } = useAuthStore();
+  const { initializeAuth } = useAuthStore();
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    if (accessToken) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.IS_LOGGED_IN, 'true');
-      return;
-    }
-
-    if (!isInitializing) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.IS_LOGGED_IN, 'false');
-    }
-  }, [accessToken, isInitializing]);
-
-  // 새로고침시 토큰 복구
-  useEffect(() => {
     const initAuth = async () => {
-      const isLoggedIn = parseIsLoggedIn(
-        localStorage.getItem(LOCAL_STORAGE_KEYS.IS_LOGGED_IN),
-      );
-      const shouldCheckAuth = isLoggedIn || Boolean(accessToken);
-
-      if (!shouldCheckAuth) {
-        setIsInitializing(false);
-        return;
-      }
-
-      if (!accessToken) {
-        await refreshAccessToken();
-      }
+      await initializeAuth();
       setIsInitializing(false);
     };
 
     initAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initializeAuth]);
 
   if (isInitializing) {
     return null;
