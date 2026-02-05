@@ -1,9 +1,10 @@
-import { api } from '@/api/api';
 import type {
   AddFavoriteArtistRequest,
   AddFavoriteArtistResponse,
   DeleteFavoriteArtistParams,
 } from '@/features/main/types/favoriteArtist';
+
+import { api } from '@/api/api';
 
 export const addFavoriteArtist = async (
   body: AddFavoriteArtistRequest,

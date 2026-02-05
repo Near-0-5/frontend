@@ -1,13 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  addFavoriteArtist,
-  deleteFavoriteArtist,
-} from '@/features/main/api/favoriteArtist';
+
 import type {
   AddFavoriteArtistRequest,
   AddFavoriteArtistResponse,
   DeleteFavoriteArtistParams,
 } from '@/features/main/types/favoriteArtist';
+
+import {
+  addFavoriteArtist,
+  deleteFavoriteArtist,
+} from '@/features/main/api/favoriteArtist';
 
 export const useAddFavoriteArtistMutation = () => {
   const queryClient = useQueryClient();

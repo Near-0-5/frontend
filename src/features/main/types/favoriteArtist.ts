@@ -3,11 +3,11 @@ export type AddFavoriteArtistRequest = {
 };
 
 export type AddFavoriteArtistResponse = {
-  userId: number;
   artistId: number;
   artistName: string;
-  profileImgUrl: string;
   createdAt: string;
+  profileImgUrl: string;
+  userId: number;
 };
 
 export type DeleteFavoriteArtistParams = {
