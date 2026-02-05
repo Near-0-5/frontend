@@ -1,17 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from '@/api/api';
+import type {
+  AddPreferredCategoryRequest,
+  AddPreferredCategoryResponse,
+  DeletePreferredCategoryParams,
+} from '@/features/main/types/preferredCategory';
 
-type AddPreferredCategoryRequest = {
-  category_id: string;
-};
-
-type AddPreferredCategoryResponse = {
-  added_at: string;
-  category_id: string;
-  category_name: string;
-  user_id: string;
-};
+import {
+  createPreferredCategory,
+  deletePreferredCategory,
+} from '@/features/main/api/preferredCategory';
 
 export const useAddPreferredCategoryMutation = () => {
   const queryClient = useQueryClient();
@@ -21,10 +19,7 @@ export const useAddPreferredCategoryMutation = () => {
     Error,
     AddPreferredCategoryRequest
   >({
-    mutationFn: async body => {
-      const { data } = await api.post('/users/me/preferred-categories', body);
-      return data;
-    },
+    mutationFn: createPreferredCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['preferredCategories'],
@@ -33,17 +28,11 @@ export const useAddPreferredCategoryMutation = () => {
   });
 };
 
-type DeletePreferredCategoryParams = {
-  categoryId: string;
-};
-
 export const useDeletePreferredCategoryMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, DeletePreferredCategoryParams>({
-    mutationFn: async ({ categoryId }) => {
-      await api.delete(`/users/me/preferred-categories/${categoryId}`);
-    },
+    mutationFn: deletePreferredCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['preferredCategories'],

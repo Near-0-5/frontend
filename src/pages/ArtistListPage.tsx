@@ -1,8 +1,10 @@
+import type { Artist } from '@/features/main/types/artist';
+
 import { FollowButton } from '@/components';
 import HeroBanner from '@/features/main/components/HeroBanner';
-import { useArtistListQuery } from '@/queries/artist';
+import { useArtistListQuery } from '@/features/main/hooks/useArtistListQuery';
 
-const MOCK_ARTISTS = [
+const MOCK_ARTISTS: Artist[] = [
   {
     agency: '쏘스뮤직',
     followerCount: 1234567,
@@ -29,13 +31,14 @@ const MOCK_ARTISTS = [
 export default function ArtistListPage() {
   const { data, isError, isSuccess } = useArtistListQuery();
 
-  const rawArtists = data?.items ?? [];
+  const rawArtists: Artist[] = data?.items ?? [];
   const useMock = isError || !isSuccess || rawArtists.length === 0;
 
-  const artists = useMock
+  const artists: Artist[] = useMock
     ? MOCK_ARTISTS
     : rawArtists.map(artist => ({
         agency: artist.agency,
+        description: artist.description ?? null,
         followerCount: artist.followerCount,
         id: artist.id,
         name: artist.name,

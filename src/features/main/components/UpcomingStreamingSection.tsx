@@ -7,7 +7,7 @@ import ModalContent from '@/components/common/modal/ModalContent';
 import ModalFooter from '@/components/common/modal/ModalFooter';
 import { ROUTES_PATHS } from '@/constants';
 import { useAuthStore } from '@/features/auth';
-import { useStreamingListQuery } from '@/queries/streaming';
+import { useStreamingListQuery } from '@/features/main/hooks/useStreamingQueries';
 
 export type UpcomingStreamingSectionProps = {
   showMoreButton?: boolean;

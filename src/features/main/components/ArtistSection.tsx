@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router';
 
+import type { Artist } from '@/features/main/types/artist';
+
 import { SectionHeader } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
-import { useArtistListQuery } from '@/queries/artist';
+import { useArtistListQuery } from '@/features/main/hooks/useArtistListQuery';
 
 export type ArtistSectionProps = {
   title: string;
@@ -10,7 +12,7 @@ export type ArtistSectionProps = {
 
 const MAX_VISIBLE = 8;
 
-const MOCK_ARTISTS = [
+const MOCK_ARTISTS: Pick<Artist, 'id' | 'name' | 'profileImage'>[] = [
   { id: 1, name: 'LE SSERAFIM', profileImage: null },
   { id: 2, name: 'NewJeans', profileImage: null },
   { id: 3, name: 'BTS', profileImage: null },
@@ -26,7 +28,7 @@ export default function ArtistSection({ title }: ArtistSectionProps) {
   const navigate = useNavigate();
 
   const { data, isError, isLoading, isSuccess } = useArtistListQuery();
-  const rawList = data?.items ?? [];
+  const rawList: Artist[] = data?.items ?? [];
 
   const useMock = isError || !isSuccess || rawList.length === 0;
 

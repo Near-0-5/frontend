@@ -8,14 +8,17 @@ import {
   Mic2 as TrotIcon,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Button, SectionHeader } from '@/components';
+import { ROUTES_PATHS } from '@/constants';
 import { CATEGORIES } from '@/constants/mockData';
-import { useCategoriesQuery } from '@/queries/category';
+import { useAuthStore } from '@/features/auth';
+import { useCategoriesQuery } from '@/features/main/hooks/useCategoriesQuery';
 import {
   useAddPreferredCategoryMutation,
   useDeletePreferredCategoryMutation,
-} from '@/queries/preferredCategory';
+} from '@/features/main/hooks/usePreferredCategoryMutations';
 
 export type CategorySectionProps = {
   title: string;
@@ -36,6 +39,9 @@ type UiCategory = {
 };
 
 export default function CategorySection({ title }: CategorySectionProps) {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+
   const { data, isError } = useCategoriesQuery();
   const { mutate: addPreferred } = useAddPreferredCategoryMutation();
   const { mutate: deletePreferred } = useDeletePreferredCategoryMutation();
@@ -75,15 +81,20 @@ export default function CategorySection({ title }: CategorySectionProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const toggleCategory = (categoryId: string) => {
+    if (!isLoggedIn) {
+      navigate(ROUTES_PATHS.LOGIN);
+      return;
+    }
+
     setSelected(prev => {
       const next = new Set(prev);
 
       if (next.has(categoryId)) {
         next.delete(categoryId);
-        deletePreferred({ categoryId });
+        deletePreferred({ categoryId }); // DeletePreferredCategoryParams
       } else {
         next.add(categoryId);
-        addPreferred({ category_id: categoryId });
+        addPreferred({ categoryId }); // AddPreferredCategoryRequest (camelCase)
       }
 
       return next;

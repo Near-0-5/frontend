@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
+import type { StreamSession } from '@/features/main/types/streaming';
+
 import { OngoingLiveCard, SectionHeader } from '@/components';
 import { ROUTES_PATHS } from '@/constants';
 import { useAuthStore } from '@/features/auth';
-import { type StreamSession, useStreamingListQuery } from '@/queries/streaming';
+import { useStreamingListQuery } from '@/features/main/hooks/useStreamingQueries';
 
 export type OngoingStreamingSectionProps = {
   showMoreButton?: boolean;
@@ -35,7 +37,7 @@ const MOCK_ONGOING_LIST = [
 type OngoingViewItem = {
   durationLabel: string;
   isLive: boolean;
-  thumbnailUrl: null | string; // 없을 수 있음 (NO IMAGE 처리)
+  thumbnailUrl: null | string;
   title: string;
 };
 
@@ -48,17 +50,15 @@ export default function OngoingStreamingSection({
 
   const { data, isError, isFetched } = useStreamingListQuery('LIVE');
 
-  const rawList = (data?.items ?? []) as StreamSession[];
+  const rawList: StreamSession[] = data?.items ?? [];
 
-  // 1) 실제 LIVE 데이터 → 뷰 모델로 변환
   const liveItems: OngoingViewItem[] = rawList.map(concert => ({
-    durationLabel: '', // 서버에서 내려오면 연결
+    durationLabel: '',
     isLive: concert.status === 'LIVE',
-    thumbnailUrl: concert.thumbnailUrl, // null/undefined면 카드에서 NO IMAGE 처리
+    thumbnailUrl: concert.thumbnailUrl,
     title: concert.concertTitle,
   }));
 
-  // 2) LIVE 데이터가 전혀 없을 때만 더미 사용
   const useMock = liveItems.length === 0 && (isError || isFetched);
 
   const list: OngoingViewItem[] = useMock ? [...MOCK_ONGOING_LIST] : liveItems;
