@@ -1,115 +1,60 @@
-import { XIcon } from 'lucide-react';
+import { SendHorizonalIcon, SmileIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components';
+import { useChatAutoScroll } from '@/features/live/hooks/useChatAutoScroll';
 import { useLiveChat } from '@/features/live/hooks/useLiveChat';
-import { cn } from '@/utils';
+
+import ChatMessageItem from './ChatMessageItem';
 
 type ChatPanelProps = {
   isAuthenticated: boolean;
-  onClose: () => void;
-  onRequireLogin: () => void;
-  roomId: string;
   streamingId: number;
 };
 
 export default function ChatPanel({
   isAuthenticated,
-  onClose,
-  onRequireLogin,
-  roomId,
   streamingId,
 }: ChatPanelProps) {
-  const { isConnected, messages, sendMessage } = useLiveChat({
-    roomId,
-    streamingId,
-  });
+  const { messages, sendMessage } = useLiveChat({ streamingId });
+  const { bottomRef, containerRef, handleScroll } = useChatAutoScroll(messages);
 
   const [input, setInput] = useState('');
 
-  const handleSendClick = () => {
-    if (!isAuthenticated) {
-      onRequireLogin();
-      return;
-    }
-
-    if (!input.trim()) {
-      return;
-    }
-
-    sendMessage(input);
+  const handleSend = () => {
+    if (!isAuthenticated || !input.trim()) return;
+    sendMessage(input.trim());
     setInput('');
   };
 
   return (
-    <section className="flex h-full flex-col rounded-xl border border-gray-200 bg-white">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b px-4 py-3">
-        <div className="flex flex-col">
-          <span className="text-base font-semibold text-gray-900">
-            실시간 채팅
-          </span>
-          <span
-            className={cn(
-              'text-xs',
-              isConnected ? 'text-green-600' : 'text-red-500',
-            )}
-          >
-            {isConnected ? '연결됨' : '연결 끊김'}
-          </span>
-        </div>
-        {onClose && (
-          <Button
-            aria-label="채팅창 닫기"
-            className="p-1 text-lg text-gray-400 hover:text-gray-600"
-            onClick={onClose}
-            size="icon"
-            variant="ghost"
-          >
-            <XIcon />
-          </Button>
-        )}
+    <section className="flex h-full min-h-0 flex-col rounded-2xl bg-linear-to-b from-[#0B0F1E] to-[#060913]">
+      <header className="shrink-0 border-b border-white/10 px-4 py-3">
+        <span className="text-sm font-semibold text-white">실시간 채팅</span>
       </header>
 
-      <ul className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
-        {messages.map(message => {
-          const isSystem = message.kind === 'system';
-
-          return (
-            <li
-              className="flex flex-col gap-1"
-              key={`${message.ts}-${message.userId}`}
-            >
-              <span className="text-xs text-gray-400">
-                {isSystem ? 'SYSTEM' : `USER ${message.userId}`}
-              </span>
-
-              <div
-                className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${
-                  isSystem
-                    ? 'bg-gray-100 text-gray-600'
-                    : 'bg-violet-50 text-gray-900'
-                }`}
-              >
-                {message.text}
-              </div>
-            </li>
-          );
-        })}
+      <ul
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3"
+        onScroll={handleScroll}
+        ref={containerRef}
+      >
+        {messages.map(message => (
+          <ChatMessageItem
+            key={`${message.ts}-${message.userId}`}
+            message={message}
+          />
+        ))}
+        <div ref={bottomRef} />
       </ul>
 
-      {/* Input */}
-      <div className="shrink-0 border-t px-3 py-2">
-        <div className="flex items-center gap-2">
+      <div className="shrink-0 border-t border-white/10 px-3 py-2">
+        <div className="flex items-center gap-2 rounded-full bg-[#1A1D2E] px-3 py-2">
+          <SmileIcon className="text-[#9CA3AF]" size={18} />
+
           <input
-            className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
+            className="min-w-0 flex-1 bg-transparent text-sm text-white placeholder-[#6B7280] outline-none"
             disabled={!isAuthenticated}
-            onChange={event => setInput(event.target.value)}
-            onClick={() => {
-              if (!isAuthenticated) {
-                onRequireLogin();
-              }
-            }}
+            onChange={e => setInput(e.target.value)}
             placeholder={
               isAuthenticated
                 ? '메시지를 입력하세요'
@@ -119,12 +64,13 @@ export default function ChatPanel({
           />
 
           <Button
-            disabled={!isAuthenticated}
-            onClick={handleSendClick}
-            size="sm"
-            variant="white"
+            disabled={!isAuthenticated || !input.trim()}
+            onClick={handleSend}
+            rounded="full"
+            size="icon"
+            variant="pink"
           >
-            전송
+            <SendHorizonalIcon size={16} />
           </Button>
         </div>
       </div>

@@ -3,18 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 import type {
   ChatMessage,
   ClientMessageEvent,
-  MessageEvent,
-  RecentEvent,
   ServerEvent,
-  SystemEvent,
 } from '@/features/live/types/chat';
 
+import { mapServerEventToChatMessage } from '@/features/live/utils/mapServerEventToChatMessage';
+
 type UseLiveChatParams = {
-  roomId: string;
   streamingId: number;
 };
 
-export const useLiveChat = ({ roomId, streamingId }: UseLiveChatParams) => {
+export function useLiveChat({ streamingId }: UseLiveChatParams) {
   const socketRef = useRef<null | WebSocket>(null);
 
   const [isConnected, setIsConnected] = useState(false);
@@ -22,31 +20,13 @@ export const useLiveChat = ({ roomId, streamingId }: UseLiveChatParams) => {
 
   useEffect(() => {
     const socket = new WebSocket(
-      `wss://api.near05.com/v1/streamings/${streamingId}/chat`,
+      `wss://d15qsadcdtxaqn.cloudfront.net/api/v1/streaming/10/chat`,
     );
 
     socketRef.current = socket;
 
     socket.onopen = () => {
       setIsConnected(true);
-    };
-
-    socket.onmessage = event => {
-      const parsed: ServerEvent = JSON.parse(event.data);
-
-      if (parsed.type === 'recent') {
-        handleRecentEvent(parsed);
-        return;
-      }
-
-      if (parsed.type === 'message') {
-        handleMessageEvent(parsed);
-        return;
-      }
-
-      if (parsed.type === 'system') {
-        handleSystemEvent(parsed);
-      }
     };
 
     socket.onclose = () => {
@@ -57,27 +37,33 @@ export const useLiveChat = ({ roomId, streamingId }: UseLiveChatParams) => {
       setIsConnected(false);
     };
 
+    socket.onmessage = event => {
+      const serverEvent: ServerEvent = JSON.parse(event.data);
+
+      if (serverEvent.type === 'recent') {
+        const recentMessages = serverEvent.items.map(item =>
+          mapServerEventToChatMessage(item),
+        );
+
+        setMessages(recentMessages);
+        return;
+      }
+
+      const chatMessage = mapServerEventToChatMessage(serverEvent);
+      setMessages(prev => [...prev, chatMessage]);
+    };
+
     return () => {
       socket.close();
     };
-  }, [roomId, streamingId]);
-
-  const handleRecentEvent = (event: RecentEvent) => {
-    const mappedMessages = event.items.map(mapServerEventToChatMessage);
-
-    setMessages(mappedMessages);
-  };
-
-  const handleMessageEvent = (event: MessageEvent) => {
-    setMessages(prev => [...prev, mapServerEventToChatMessage(event)]);
-  };
-
-  const handleSystemEvent = (event: SystemEvent) => {
-    setMessages(prev => [...prev, mapServerEventToChatMessage(event)]);
-  };
+  }, [streamingId]);
 
   const sendMessage = (text: string) => {
-    if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+    if (!socketRef.current) {
+      return;
+    }
+
+    if (socketRef.current.readyState !== WebSocket.OPEN) {
       return;
     }
 
@@ -94,15 +80,4 @@ export const useLiveChat = ({ roomId, streamingId }: UseLiveChatParams) => {
     messages,
     sendMessage,
   };
-};
-
-const mapServerEventToChatMessage = (
-  event: MessageEvent | SystemEvent,
-): ChatMessage => ({
-  kind: event.type,
-  messageId: event.message_id,
-  roomId: event.room_id,
-  text: event.text,
-  ts: event.ts,
-  userId: event.user_id,
-});
+}

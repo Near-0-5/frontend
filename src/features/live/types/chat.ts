@@ -1,12 +1,12 @@
 export type ChatMessage = {
   kind: ChatMessageKind;
-  messageId: null | string;
+  messageId: string;
   roomId: string;
   text: string;
   ts: string;
-  userId: string;
+  userId: number;
+  userName: string;
 };
-
 // 채팅 메세지 타입
 export type ChatMessageKind = 'message' | 'system';
 
@@ -23,7 +23,7 @@ export type MessageEvent = {
   text: string;
   ts: string;
   type: 'message';
-  user_id: string;
+  user_id: number;
 };
 
 //서버 -> 클라이언트 : recent 이벤트
@@ -36,6 +36,14 @@ export type RecentEvent = {
 // 서버 -> 클라이언트 전체 이벤트 유니온
 export type ServerEvent = MessageEvent | RecentEvent | SystemEvent;
 
+export type SystemChatMessage = {
+  kind: 'system';
+  messageId: null;
+  roomId: string;
+  text: string;
+  ts: string;
+};
+
 // 서버 -> 클라이언트 : system 이벤트
 export type SystemEvent = {
   message_id: null;
@@ -43,5 +51,5 @@ export type SystemEvent = {
   text: string;
   ts: string;
   type: 'system';
-  user_id: string;
+  user_id: number;
 };
