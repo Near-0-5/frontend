@@ -1,3 +1,4 @@
+export { default as ArtistDetailPage } from './ArtistDetailPage';
 export { default as ArtistListPage } from './ArtistListPage';
 export { default as ConcertDetailPage } from './ConcertDetailPage';
 export { default as LoginPage } from './LoginPage';

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import type { StreamSession } from '@/features/main/types/streaming';
@@ -16,18 +15,21 @@ export type OngoingStreamingSectionProps = {
 const MOCK_ONGOING_LIST = [
   {
     durationLabel: '1:20:45',
+    id: 1001,
     isLive: true,
     thumbnailUrl: '/images/Ongoing-1.png',
     title: 'LE SSERAFIM 컴백 쇼케이스 LIVE',
   },
   {
     durationLabel: '45:20',
+    id: 1002,
     isLive: true,
     thumbnailUrl: '/images/Ongoing-2.png',
     title: '팬미팅 생중계',
   },
   {
     durationLabel: '12:13:15',
+    id: 1003,
     isLive: true,
     thumbnailUrl: '/images/Ongoing-3.png',
     title: '멤버들과 함께하는 Q&A 시간',
@@ -36,6 +38,7 @@ const MOCK_ONGOING_LIST = [
 
 type OngoingViewItem = {
   durationLabel: string;
+  id: number;
   isLive: boolean;
   thumbnailUrl: null | string;
   title: string;
@@ -54,6 +57,7 @@ export default function OngoingStreamingSection({
 
   const liveItems: OngoingViewItem[] = rawList.map(concert => ({
     durationLabel: '',
+    id: concert.id,
     isLive: concert.status === 'LIVE',
     thumbnailUrl: concert.thumbnailUrl,
     title: concert.concertTitle,
@@ -62,10 +66,6 @@ export default function OngoingStreamingSection({
   const useMock = liveItems.length === 0 && (isError || isFetched);
 
   const list: OngoingViewItem[] = useMock ? [...MOCK_ONGOING_LIST] : liveItems;
-
-  useEffect(() => {
-    console.log('OngoingStreamingSection list:', list);
-  }, [list]);
 
   const handleClickMore = () => {
     if (!isLoggedIn) {
@@ -88,6 +88,7 @@ export default function OngoingStreamingSection({
           {list.slice(0, 3).map((concert, index) => (
             <OngoingLiveCard
               durationLabel={concert.durationLabel}
+              id={concert.id}
               isLive={concert.isLive}
               key={concert.title + index}
               thumbnailUrl={concert.thumbnailUrl}

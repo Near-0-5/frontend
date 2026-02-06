@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ConcertCard, SectionHeader } from '@/components';
@@ -23,10 +23,6 @@ export default function UpcomingStreamingSection({
 
   const { data, isError, isFetched } = useStreamingListQuery('READY');
   const list = data?.items ?? [];
-
-  useEffect(() => {
-    console.log('UpcomingStreamingSection list:', list);
-  }, [list]);
 
   const showEmptyMessage = isError && isFetched && list.length === 0;
 
@@ -75,6 +71,7 @@ export default function UpcomingStreamingSection({
             {list.slice(0, 3).map(concert => (
               <ConcertCard
                 dateLabel={concert.startAt}
+                id={concert.id}
                 key={concert.id}
                 locationLabel={concert.sessionName}
                 onClickAlert={() => handleClickAlert(concert.concertTitle)}

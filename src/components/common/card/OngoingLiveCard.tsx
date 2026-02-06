@@ -1,5 +1,8 @@
+import { useNavigate } from 'react-router';
+
 export type OngoingLiveCardProps = {
   durationLabel?: string;
+  id: number;
   isLive?: boolean;
   thumbnailUrl: string;
   title: string;
@@ -7,12 +10,29 @@ export type OngoingLiveCardProps = {
 
 export default function OngoingLiveCard({
   durationLabel,
+  id,
   isLive = true,
   thumbnailUrl,
   title,
 }: OngoingLiveCardProps) {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate(`/concert/${id}`);
+  };
+
   return (
-    <article className="group flex h-66.5 w-full flex-col overflow-hidden rounded-3xl border border-[#4A5565] bg-[#101828] transition-colors duration-200 hover:border-[#DC196D]">
+    <div
+      className="group flex h-66.5 w-full flex-col overflow-hidden rounded-3xl border border-[#4A5565] bg-[#101828] transition-colors duration-200 hover:border-[#DC196D]"
+      onClick={handleNavigation}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleNavigation();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+    >
       <div className="relative h-52.5 w-full overflow-hidden">
         <img
           alt={title}
@@ -37,6 +57,6 @@ export default function OngoingLiveCard({
       <div className="flex flex-1 items-center bg-[#101828] px-4 py-3">
         <h3 className="line-clamp-1 text-base font-bold text-white">{title}</h3>
       </div>
-    </article>
+    </div>
   );
 }

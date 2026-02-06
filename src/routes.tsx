@@ -1,5 +1,6 @@
 import { ROUTES_PATHS } from '@/constants';
 import {
+  ArtistDetailPage,
   ArtistListPage,
   ConcertDetailPage,
   LoginPage,
@@ -49,5 +50,9 @@ export const PROTECTED_ROUTES = [
   {
     element: <ConcertDetailPage />,
     path: ROUTES_PATHS.CONCERT_DETAIL,
+  },
+  {
+    element: <ArtistDetailPage />,
+    path: ROUTES_PATHS.ARTIST_DETAIL,
   },
 ];

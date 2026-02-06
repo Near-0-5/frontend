@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 
-import { ConcertMockImage, ProfileMockImage } from '@/assets';
+import { ConcertMockImage, ProfileMockIcon } from '@/assets';
 import { Button } from '@/components';
 import { useStreamSession } from '@/features/live/hooks';
 
@@ -26,7 +26,7 @@ export default function ConcertDetailPage() {
   const handleProfileImgError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    e.currentTarget.src = ProfileMockImage;
+    e.currentTarget.src = ProfileMockIcon;
   };
 
   if (isLoading || isError || !streamDetail) {
@@ -93,7 +93,7 @@ export default function ConcertDetailPage() {
                     alt={mainArtist?.name || 'Artist'}
                     className="h-full w-full object-cover"
                     onError={handleProfileImgError}
-                    src={mainArtist?.profileImgUrl || ProfileMockImage}
+                    src={mainArtist?.profileImgUrl || ProfileMockIcon}
                   />
                 </div>
                 <div>
