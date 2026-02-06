@@ -17,7 +17,7 @@ export const fetchArtistList = async ({
   pageSize,
 }: FetchArtistListParams): Promise<ArtistList> => {
   const { data } = await api.get<ArtistList>('/artists', {
-    params: { page, page_size: pageSize, sort_by: 'oldest' },
+    params: { page, page_size: pageSize, sort_by: 'latest' },
   });
 
   return data;
