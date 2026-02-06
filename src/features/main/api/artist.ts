@@ -3,12 +3,21 @@ import type { ArtistList } from '@/features/main/types/artist';
 import { api } from '@/api/api';
 
 export const ARTIST_QUERY_KEYS = {
-  MAIN_LIST: ['artists', 'list', 'main'] as const,
+  LIST: (page: number, pageSize: number) =>
+    ['artists', 'list', page, pageSize] as const,
 };
 
-export const fetchArtistList = async (): Promise<ArtistList> => {
+type FetchArtistListParams = {
+  page: number;
+  pageSize: number;
+};
+
+export const fetchArtistList = async ({
+  page,
+  pageSize,
+}: FetchArtistListParams): Promise<ArtistList> => {
   const { data } = await api.get<ArtistList>('/artists', {
-    params: { page: 1, page_size: 20, sort_by: 'latest' },
+    params: { page, page_size: pageSize, sort_by: 'oldtest' },
   });
 
   return data;
