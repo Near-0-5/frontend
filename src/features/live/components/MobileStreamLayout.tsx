@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import type { StreamDetail } from '@/features/live/types/stream';
 
+import { Button } from '@/components';
+
 import ChatPanel from './ChatPanel';
 import StreamInfoSection from './StreamInfoSection';
 import StreamPlayer from './StreamPlayer';
@@ -24,25 +26,26 @@ export default function MobileStreamLayout({
   const isStreamLive = streamDetail?.status === 'LIVE' && playbackUrl != null;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-[#060913]">
-      <div className="aspect-video w-full shrink-0 bg-[#000000]">
+    <div className="flex min-h-0 flex-1 flex-col bg-[#070913]">
+      <div className="aspect-video w-full shrink-0 bg-[#0B0D1A]">
         {isStreamLive ? (
           <StreamPlayer playbackUrl={playbackUrl} />
         ) : (
-          <div className="flex h-full items-center justify-center text-[#9CA3AF]">
+          <div className="flex h-full items-center justify-center text-sm text-[#BCBCBC]">
             방송 준비 중
           </div>
         )}
       </div>
 
       {streamDetail && (
-        <button
-          className="bg-[#0B0F1E] py-2 text-sm text-[#D1D5DB]"
+        <Button
           onClick={() => setIsInfoOpen(true)}
-          type="button"
+          rounded="sm"
+          size="sm"
+          variant="navy"
         >
           방송 정보 보기
-        </button>
+        </Button>
       )}
 
       <div
@@ -56,16 +59,18 @@ export default function MobileStreamLayout({
       </div>
 
       {isInfoOpen && streamDetail && (
-        <div className="fixed inset-0 bg-black/40">
-          <div className="absolute bottom-0 w-full rounded-t-2xl bg-[#0B0F1E] p-4">
+        <div className="fixed inset-0 z-50 bg-black/40">
+          <div className="absolute bottom-0 w-full rounded-t-2xl bg-[#101828] p-4">
             <StreamInfoSection streamDetail={streamDetail} />
-            <button
-              className="mt-4 w-full rounded-md bg-[#1A1D2E] py-2 text-sm text-white"
+
+            <Button
+              className="mt-4 w-full"
               onClick={() => setIsInfoOpen(false)}
-              type="button"
+              size="default"
+              variant="navy"
             >
               닫기
-            </button>
+            </Button>
           </div>
         </div>
       )}
