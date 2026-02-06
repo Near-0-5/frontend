@@ -49,13 +49,16 @@ export const useAuthStore = create<AuthState>((set, get) => {
 
       if (!shouldCheckAuth) {
         setLoggedInStorage(false);
+        set({ isInitialized: true });
         return;
       }
 
       if (!accessToken) {
         await refreshAccessToken();
       }
+      set({ isInitialized: true });
     },
+    isInitialized: false,
     isLoggedIn: () => Boolean(get().accessToken),
     logout: async () => {
       try {

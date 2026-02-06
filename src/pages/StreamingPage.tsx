@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { MessageSquareIcon, MessageSquareOffIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { Button } from '@/components';
 import {
   ChatPanel,
   MobileStreamLayout,
@@ -14,35 +16,72 @@ import {
 } from '@/features/live/styles/layoutVariants';
 import { cn } from '@/utils';
 
+const CHAT_OPEN_STORAGE_KEY = 'streaming:chat-open';
+
 export default function StreamingPage() {
   const { id } = useParams<{ id: string }>();
   const streamingId = Number(id);
 
   const { playbackUrl, streamDetail } = useStreamSession(streamingId);
   const [isInfoOpen, setIsInfoOpen] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(true);
 
   const isAuthenticated = Boolean(streamDetail);
   const isStreamLive = streamDetail?.status === 'LIVE' && playbackUrl != null;
 
+  useEffect(() => {
+    const stored = localStorage.getItem(CHAT_OPEN_STORAGE_KEY);
+    if (stored != null) {
+      setIsChatOpen(stored === 'true');
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(CHAT_OPEN_STORAGE_KEY, String(isChatOpen));
+  }, [isChatOpen]);
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col bg-[#070913]">
       {/* Desktop */}
       <div
         className={cn(streamLayoutVariants({ layout: 'desktop' }))}
         style={{
-          gridTemplateColumns: 'minmax(0,1fr) 360px',
-          height: 'clamp(600px, 80vh, 900px)',
+          flex: 1,
+          gridTemplateColumns: isChatOpen
+            ? 'minmax(0,1fr) minmax(420px, 30%)'
+            : 'minmax(0,1fr) 0px',
+          minHeight: 'clamp(600px, 80vh, 900px)',
         }}
       >
-        <div className="flex min-h-0 flex-col gap-4">
-          <div className="aspect-video w-full overflow-hidden rounded-xl bg-[#000000]">
+        <div
+          className={cn(
+            'flex min-h-0 flex-col gap-4',
+            !isChatOpen && 'mx-auto w-full max-w-main',
+          )}
+        >
+          <div className="relative w-full shrink-0 overflow-hidden rounded-xl bg-[#000000]">
             {isStreamLive ? (
               <StreamPlayer playbackUrl={playbackUrl} />
             ) : (
-              <div className="flex h-full items-center justify-center text-[#9CA3AF]">
+              <div className="flex aspect-video items-center justify-center text-[#9CA3AF]">
                 방송 준비 중
               </div>
             )}
+
+            <div className="absolute top-3 right-3 z-10">
+              <Button
+                className="bg-black/40 text-white backdrop-blur hover:bg-black/60"
+                onClick={() => setIsChatOpen(prev => !prev)}
+                size="icon"
+                variant="ghost"
+              >
+                {isChatOpen ? (
+                  <MessageSquareOffIcon size={18} />
+                ) : (
+                  <MessageSquareIcon size={18} />
+                )}
+              </Button>
+            </div>
           </div>
 
           {streamDetail && <StreamInfoSection streamDetail={streamDetail} />}
@@ -51,7 +90,9 @@ export default function StreamingPage() {
         <div
           className={cn(
             chatWrapperVariants({ size: 'desktop' }),
-            'h-full flex-none overflow-hidden',
+            'flex flex-col overflow-hidden transition-all duration-300',
+            'h-[clamp(600px,80vh,900px)]',
+            !isChatOpen && 'pointer-events-none opacity-0',
           )}
         >
           <ChatPanel
@@ -63,24 +104,24 @@ export default function StreamingPage() {
 
       {/* Tablet */}
       <div className={cn(streamLayoutVariants({ layout: 'tablet' }))}>
-        <div className="aspect-video w-full overflow-hidden rounded-xl bg-[#000000]">
+        <div className="w-full overflow-hidden rounded-xl bg-[#000000]">
           {isStreamLive ? (
             <StreamPlayer playbackUrl={playbackUrl} />
           ) : (
-            <div className="flex h-full items-center justify-center text-[#9CA3AF]">
+            <div className="flex aspect-video items-center justify-center text-[#9CA3AF]">
               방송 준비 중
             </div>
           )}
         </div>
 
         {streamDetail && (
-          <button
-            className="rounded-md bg-[#0B0F1E] py-2 text-sm text-[#D1D5DB]"
+          <Button
             onClick={() => setIsInfoOpen(prev => !prev)}
-            type="button"
+            size="sm"
+            variant="navy"
           >
             {isInfoOpen ? '방송 정보 접기' : '방송 정보 펼치기'}
-          </button>
+          </Button>
         )}
 
         {isInfoOpen && streamDetail && (

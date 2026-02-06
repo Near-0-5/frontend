@@ -1,4 +1,4 @@
-import { ChevronDownIcon, UserIcon } from 'lucide-react';
+import { UserIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 import {
@@ -30,7 +30,6 @@ export default function UserMenuDropdown() {
           variant="pink"
         >
           <UserIcon />
-          <ChevronDownIcon />
         </Button>
       </DropdownTrigger>
 

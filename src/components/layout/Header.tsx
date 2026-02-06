@@ -1,4 +1,4 @@
-import { MenuIcon, SearchIcon } from 'lucide-react';
+import { MenuIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
 import { Button } from '@/components';
@@ -43,10 +43,6 @@ export function Header({ onMenuClick }: HeaderProps) {
         </Button>
       ) : (
         <div className={cn(headerGroupVariants())}>
-          <Button size="icon" variant="ghost">
-            <SearchIcon />
-          </Button>
-
           <NotificationDropdown />
           <UserMenuDropdown />
         </div>

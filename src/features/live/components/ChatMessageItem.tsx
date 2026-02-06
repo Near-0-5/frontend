@@ -7,7 +7,9 @@ type ChatMessageItemProps = {
 export default function ChatMessageItem({ message }: ChatMessageItemProps) {
   if (message.kind === 'system') {
     return (
-      <li className="py-2 text-center text-xs text-gray-500">{message.text}</li>
+      <li className="py-2 text-center text-xs text-[#BCBCBC]">
+        {message.text}
+      </li>
     );
   }
 
@@ -16,17 +18,14 @@ export default function ChatMessageItem({ message }: ChatMessageItemProps) {
 
   return (
     <li className="flex items-start gap-3">
-      {/* Avatar */}
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-pink-400 to-purple-500 text-xs font-bold">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#DC196D] to-[#6F4BFF] text-xs font-bold text-white">
         {initial}
       </div>
 
-      <div className="flex flex-col gap-1">
-        {/* User meta */}
-        <span className="text-xs font-semibold text-gray-300">{userName}</span>
+      <div className="flex min-w-0 flex-col gap-1">
+        <span className="text-xs font-semibold text-[#FB64B6]">{userName}</span>
 
-        {/* Message */}
-        <p className="inline-block rounded-md bg-white/5 px-2 py-1 text-sm leading-snug text-gray-100">
+        <p className="inline-block max-w-full rounded-2xl bg-[#1A1F2E] px-4 py-2 text-sm leading-snug wrap-break-word whitespace-normal text-white">
           {message.text}
         </p>
       </div>

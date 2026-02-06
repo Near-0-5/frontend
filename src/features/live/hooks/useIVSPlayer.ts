@@ -18,10 +18,13 @@ type UseIVSPlayerProps = {
 export const useIVSPlayer = ({ playbackUrl }: UseIVSPlayerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<null | Player>(null);
-  const PLAYER_CLASSES = ['vjs-big-play-centered', 'vjs-fluid'];
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) {
+      return;
+    }
+
+    const PLAYER_CLASSES = ['vjs-big-play-centered'];
 
     const videoElement = document.createElement('video-js');
     videoElement.classList.add(...PLAYER_CLASSES);
@@ -31,8 +34,6 @@ export const useIVSPlayer = ({ playbackUrl }: UseIVSPlayerProps) => {
     const videoJsOptions = {
       autoplay: true,
       controls: true,
-      fluid: true,
-      responsive: true,
       sources: [
         {
           src: playbackUrl,
@@ -41,10 +42,7 @@ export const useIVSPlayer = ({ playbackUrl }: UseIVSPlayerProps) => {
       ],
     };
 
-    const player = videojs(videoElement, videoJsOptions, () => {
-      console.log('Player is ready');
-    });
-
+    const player = videojs(videoElement, videoJsOptions);
     playerRef.current = player;
 
     return () => {
