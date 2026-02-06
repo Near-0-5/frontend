@@ -20,6 +20,8 @@ function SocialLoginRedirect() {
     if (accessToken) {
       setAccessToken(accessToken);
 
+      window.history.replaceState({}, '', window.location.pathname);
+
       const REDIRECT_PATH = localStorage.getItem(REDIRECT_KEY);
 
       if (REDIRECT_PATH) {
