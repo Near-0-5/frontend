@@ -1,7 +1,7 @@
 import { MenuIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
-import { Button } from '@/components';
+import { Button, Logo } from '@/components';
 import {
   headerGroupVariants,
   headerRootVariants,
@@ -27,8 +27,8 @@ export function Header({ onMenuClick }: HeaderProps) {
           <MenuIcon />
         </Button>
 
-        <Link className="text-xl font-bold text-white" to={ROUTES_PATHS.MAIN}>
-          Near 0.5
+        <Link className="flex items-center" to={ROUTES_PATHS.MAIN}>
+          <Logo className="h-6" theme="light" />
         </Link>
       </div>
 

@@ -30,4 +30,5 @@ export { Input } from './ui/Input';
 export { Loading } from './ui/Loading';
 export { Toaster } from './ui/Sonner';
 
+export { default as Logo } from '@/components/common/Logo';
 export { default as Tabs } from '@/components/common/Tabs';
