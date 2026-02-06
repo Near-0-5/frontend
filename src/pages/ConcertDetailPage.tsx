@@ -11,11 +11,13 @@ import { useNavigate, useParams } from 'react-router';
 import { ConcertMockImage, ProfileMockIcon } from '@/assets';
 import { Button } from '@/components';
 import { useStreamSession } from '@/features/live/hooks';
+import { useArtistNavigation } from '@/hooks/useArtistNavigation';
 
 export default function ConcertDetailPage() {
   const { id } = useParams<{ id: string }>();
   const sessionId = Number(id);
   const navigate = useNavigate();
+  const { navigateToArtist } = useArtistNavigation();
 
   const { isError, isLoading, streamDetail } = useStreamSession(sessionId);
 
@@ -87,8 +89,14 @@ export default function ConcertDetailPage() {
                 )}
               </div>
 
-              <div className="flex items-center space-x-5">
-                <div className="h-12 w-12 overflow-hidden rounded-full border-2 border-slate-600 bg-slate-700">
+              <Button
+                className="flex items-center gap-0 space-x-5 px-0 text-left transition-opacity hover:opacity-80"
+                onClick={() =>
+                  mainArtist?.id && navigateToArtist(mainArtist.id)
+                }
+                variant="ghost"
+              >
+                <div className="h-12 w-12 overflow-hidden rounded-full border-none">
                   <img
                     alt={mainArtist?.name || 'Artist'}
                     className="h-full w-full object-cover"
@@ -96,13 +104,14 @@ export default function ConcertDetailPage() {
                     src={mainArtist?.profileImgUrl || ProfileMockIcon}
                   />
                 </div>
+
                 <div>
                   <p className="text-lg font-bold">
                     {mainArtist?.name || 'Unknown Artist'}
                   </p>
                   <p className="text-slate-400">{mainArtist?.agency}</p>
                 </div>
-              </div>
+              </Button>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import type { StreamDetail } from '@/features/live/types';
 
 import { Button } from '@/components';
+import { useArtistNavigation } from '@/hooks/useArtistNavigation';
 
 type StreamInfoSectionProps = {
   streamDetail: StreamDetail;
@@ -9,7 +10,11 @@ type StreamInfoSectionProps = {
 export default function StreamInfoSection({
   streamDetail,
 }: StreamInfoSectionProps) {
+  const { navigateToArtist } = useArtistNavigation();
+
   const streamStartDate = `${new Date(streamDetail.startAt).toLocaleString()} 시작됨`;
+
+  const artistId = streamDetail.lineup[0]?.id;
   const profileImg = streamDetail.lineup[0]?.profileImgUrl;
   const artistName = streamDetail.lineup[0]?.name || 'Unknown';
 
@@ -40,18 +45,25 @@ export default function StreamInfoSection({
 
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            {profileImg ? (
-              <img
-                alt="Profile"
-                className="h-10 w-10 rounded-full object-cover"
-                src={profileImg}
-              />
-            ) : (
-              <div className="h-10 w-10 rounded-full bg-linear-to-tr from-pink-500 to-violet-500" />
-            )}
-            <span className="text-sm font-semibold text-white">
-              {artistName}
-            </span>
+            <Button
+              className="flex items-center gap-3 px-0 transition-opacity hover:opacity-80"
+              onClick={() => artistId && navigateToArtist(artistId)}
+              type="button"
+              variant="ghost"
+            >
+              {profileImg ? (
+                <img
+                  alt="Profile"
+                  className="h-10 w-10 rounded-full object-cover"
+                  src={profileImg}
+                />
+              ) : (
+                <div className="h-10 w-10 rounded-full bg-linear-to-tr from-pink-500 to-violet-500" />
+              )}
+              <span className="text-sm font-semibold text-white">
+                {artistName}
+              </span>
+            </Button>
           </div>
 
           <Button rounded="full" size="sm" variant="pink">
