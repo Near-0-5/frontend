@@ -1,6 +1,11 @@
 import type { StreamDetail } from '@/features/live/types';
 
-import { Button } from '@/components';
+import { Button, FollowButton } from '@/components';
+import {
+  useAddFavoriteArtistMutation,
+  useDeleteFavoriteArtistMutation,
+} from '@/features/main/hooks/useFavoriteArtistMutations';
+import { useFavoriteArtistsQuery } from '@/features/main/hooks/useFavoriteArtistsQuery';
 import { useArtistNavigation } from '@/hooks';
 
 type StreamInfoSectionProps = {
@@ -12,11 +17,19 @@ export default function StreamInfoSection({
 }: StreamInfoSectionProps) {
   const { navigateToArtist } = useArtistNavigation();
 
+  const { data: favoriteArtistsData } = useFavoriteArtistsQuery();
+
+  const { mutate: addFavorite } = useAddFavoriteArtistMutation();
+  const { mutate: deleteFavorite } = useDeleteFavoriteArtistMutation();
+
   const streamStartDate = `${new Date(streamDetail.startAt).toLocaleString()} 시작됨`;
 
   const artistId = streamDetail.lineup[0]?.id;
   const profileImg = streamDetail.lineup[0]?.profileImgUrl;
   const artistName = streamDetail.lineup[0]?.name || 'Unknown';
+
+  const isFollowing =
+    favoriteArtistsData?.items.some(artist => artist.id === artistId) ?? false;
 
   const tags = [
     streamDetail.category,
@@ -24,6 +37,15 @@ export default function StreamInfoSection({
     streamDetail.lineup[0]?.type || 'GroupType',
     streamDetail.status,
   ];
+
+  const handleFollowToggle = (nextIsFollowing: boolean) => {
+    if (!artistId) return;
+    if (nextIsFollowing) {
+      addFavorite({ artistId });
+    } else {
+      deleteFavorite({ artistId });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -43,7 +65,7 @@ export default function StreamInfoSection({
 
         <hr className="border-[#4A5565]" />
 
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between pt-4">
           <div className="flex items-center gap-3">
             <Button
               className="flex items-center gap-3 px-0 transition-opacity hover:opacity-80"
@@ -66,9 +88,11 @@ export default function StreamInfoSection({
             </Button>
           </div>
 
-          <Button rounded="full" size="sm" variant="pink">
-            팔로우
-          </Button>
+          <FollowButton
+            initialIsFollowing={isFollowing}
+            key={artistId}
+            onToggle={handleFollowToggle}
+          />
         </div>
       </div>
 

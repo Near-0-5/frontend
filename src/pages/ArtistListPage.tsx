@@ -3,6 +3,11 @@ import type { Artist } from '@/features/main/types/artist';
 import { FollowButton } from '@/components';
 import HeroBanner from '@/features/main/components/HeroBanner';
 import { useArtistListQuery } from '@/features/main/hooks/useArtistListQuery';
+import {
+  useAddFavoriteArtistMutation,
+  useDeleteFavoriteArtistMutation,
+} from '@/features/main/hooks/useFavoriteArtistMutations';
+import { useFavoriteArtistsQuery } from '@/features/main/hooks/useFavoriteArtistsQuery';
 
 const MOCK_ARTISTS: Artist[] = [
   {
@@ -30,6 +35,11 @@ const MOCK_ARTISTS: Artist[] = [
 
 export default function ArtistListPage() {
   const { data, isError, isSuccess } = useArtistListQuery();
+
+  const { data: favoriteArtistsData } = useFavoriteArtistsQuery();
+
+  const { mutate: addFavorite } = useAddFavoriteArtistMutation();
+  const { mutate: deleteFavorite } = useDeleteFavoriteArtistMutation();
 
   const rawArtists: Artist[] = data?.items ?? [];
   const useMock = isError || !isSuccess || rawArtists.length === 0;
@@ -68,45 +78,65 @@ export default function ArtistListPage() {
           </p>
         ) : (
           <section className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {artists.map(artist => (
-              <article
-                className="flex h-full flex-col rounded-3xl bg-[#10131C] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
-                key={artist.id}
-              >
-                <div className="h-66.5 w-full overflow-hidden rounded-2xl bg-gray-700">
-                  {artist.profileImage ? (
-                    <img
-                      alt={artist.name}
-                      className="h-full w-full object-cover"
-                      src={artist.profileImage}
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
-                      No Image
-                    </div>
-                  )}
-                </div>
+            {artists.map(artist => {
+              // 1. [핵심] 반복문 안에서 '현재 아티스트'가 내 목록에 있는지 확인
+              const isFollowing =
+                favoriteArtistsData?.items.some(fav => fav.id === artist.id) ??
+                false;
 
-                <div className="mt-4 flex flex-1 flex-col">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-1">
-                      <h3 className="text-base font-bold tracking-[-0.04em] lg:text-lg">
-                        {artist.name}
-                      </h3>
-                      <p className="text-xs text-[#D9D9D9]">{artist.agency}</p>
-                      <p className="text-xs text-[#D9D9D9]">
-                        {artist.followerCount} 팔로워
-                      </p>
-                    </div>
-
-                    <FollowButton
-                      className="mt-1 shrink-0"
-                      initialIsFollowing={false}
-                    />
+              return (
+                <article
+                  className="flex h-full flex-col rounded-3xl bg-[#10131C] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
+                  key={artist.id}
+                >
+                  <div className="h-66.5 w-full overflow-hidden rounded-2xl bg-gray-700">
+                    {artist.profileImage ? (
+                      <img
+                        alt={artist.name}
+                        className="h-full w-full object-cover"
+                        src={artist.profileImage}
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
+                        No Image
+                      </div>
+                    )}
                   </div>
-                </div>
-              </article>
-            ))}
+
+                  <div className="mt-4 flex flex-1 flex-col">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <h3 className="text-base font-bold tracking-[-0.04em] lg:text-lg">
+                          {artist.name}
+                        </h3>
+                        <p className="text-xs text-[#D9D9D9]">
+                          {artist.agency}
+                        </p>
+                        <p className="text-xs text-[#D9D9D9]">
+                          {artist.followerCount} 팔로워
+                        </p>
+                      </div>
+
+                      {/* 2. [핵심] 버튼 연결 */}
+                      <FollowButton
+                        className="mt-1 shrink-0"
+                        // 위에서 계산한 값 넣어주기
+                        initialIsFollowing={isFollowing}
+                        // 토글 될 때 실행할 로직을 인라인으로 작성
+                        onToggle={nextIsFollowing => {
+                          if (nextIsFollowing) {
+                            // 여기서는 artist.id 접근 가능!
+                            addFavorite({ artistId: artist.id });
+                          } else {
+                            deleteFavorite({ artistId: artist.id });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </section>
         )}
       </main>
