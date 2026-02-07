@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { useActionKey, useConcertNavigation } from '@/hooks';
 
 export type OngoingLiveCardProps = {
   durationLabel?: string;
@@ -15,21 +15,14 @@ export default function OngoingLiveCard({
   thumbnailUrl,
   title,
 }: OngoingLiveCardProps) {
-  const navigate = useNavigate();
-
-  const handleNavigation = () => {
-    navigate(`/concert/${id}`);
-  };
+  const { navigateToConcert } = useConcertNavigation();
+  const handleKeyDown = useActionKey(() => navigateToConcert(id));
 
   return (
     <div
       className="group flex h-66.5 w-full flex-col overflow-hidden rounded-3xl border border-[#4A5565] bg-[#101828] transition-colors duration-200 hover:border-[#DC196D]"
-      onClick={handleNavigation}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleNavigation();
-        }
-      }}
+      onClick={() => navigateToConcert(id)}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
     >

@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router';
-
 import { Button } from '@/components';
+import { useActionKey, useConcertNavigation } from '@/hooks';
 
 export type ConcertCardProps = {
   dateLabel: string;
@@ -23,24 +22,17 @@ export default function ConcertCard({
 }: ConcertCardProps) {
   console.log('ConcertCard : ', title);
 
-  const navigate = useNavigate();
+  const { navigateToConcert } = useConcertNavigation();
+  const handleKeyDown = useActionKey(() => navigateToConcert(id));
 
   const hasThumbnail =
     typeof thumbnailUrl === 'string' && thumbnailUrl.length > 0;
 
-  const handleNavigation = () => {
-    navigate(`/concert/${id}`);
-  };
-
   return (
     <div
       className="group flex h-90.75 flex-col overflow-hidden rounded-3xl border border-[#4A5565] bg-[#101828] transition-colors duration-200 hover:border-[#DC196D]"
-      onClick={handleNavigation}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleNavigation();
-        }
-      }}
+      onClick={() => navigateToConcert(id)}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
     >
@@ -73,7 +65,10 @@ export default function ConcertCard({
         </h3>
         <Button
           className="mt-1 w-full justify-center gap-1 text-sm font-semibold"
-          onClick={onClickAlert}
+          onClick={e => {
+            e.stopPropagation();
+            onClickAlert?.();
+          }}
           rounded="full"
           size="lg"
           variant="lightGrey"

@@ -11,7 +11,7 @@ import { useNavigate, useParams } from 'react-router';
 import { ConcertMockImage, ProfileMockIcon } from '@/assets';
 import { Button } from '@/components';
 import { useStreamSession } from '@/features/live/hooks';
-import { useArtistNavigation } from '@/hooks/useArtistNavigation';
+import { useArtistNavigation } from '@/hooks';
 
 export default function ConcertDetailPage() {
   const { id } = useParams<{ id: string }>();
