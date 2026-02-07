@@ -1,7 +1,7 @@
 import type { StreamDetail } from '@/features/live/types';
 
 import { Button } from '@/components';
-import { useArtistNavigation } from '@/hooks/useArtistNavigation';
+import { useArtistNavigation } from '@/hooks';
 
 type StreamInfoSectionProps = {
   streamDetail: StreamDetail;

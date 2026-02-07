@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 
 import { Button, ConcertCard, OngoingLiveCard } from '@/components';
 import { useArtistConcertsQuery } from '@/features/live/hooks';
-import { useArtistDetailQuery } from '@/hooks/useArtistDetailQuery';
+import { useArtistDetailQuery } from '@/hooks';
 
 export default function ArtistDetailPage() {
   const { id } = useParams<{ id: string }>();
