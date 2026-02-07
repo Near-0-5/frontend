@@ -17,19 +17,16 @@ type GetNotificationsResponse = {
 export async function deleteNotification(
   notificationId: number,
 ): Promise<void> {
-  await api.delete(`/api/v1/notifications/${notificationId}`);
+  await api.delete(`/notifications/${notificationId}`);
 }
 
 export async function getNotifications(): Promise<NotificationItem[]> {
-  const response = await api.get<GetNotificationsResponse>(
-    '/api/v1/notifications',
-    {
-      params: {
-        limit: 20,
-        status: 'SENT',
-      },
+  const response = await api.get<GetNotificationsResponse>('/notifications', {
+    params: {
+      limit: 20,
+      status: 'SENT',
     },
-  );
+  });
 
   return response.data.items.map(item => ({
     createdAt: item.created_at,

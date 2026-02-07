@@ -1,18 +1,25 @@
 import { AlertTriangleIcon, CalendarIcon, HeartIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Button, Modal, ModalContent, ModalTrigger } from '@/components';
+import { ROUTES_PATHS } from '@/constants';
+import { useAuthStore } from '@/features/auth';
+import { deleteUserAccount } from '@/features/auth/api/authApi';
 
-type WithdrawCardProps = {
-  onWithdraw: () => void;
-};
+type WithdrawReason = '기타' | '사용 빈도 낮음' | '서비스 오류' | '콘텐츠 불만';
 
-export default function WithdrawCard({ onWithdraw }: WithdrawCardProps) {
+export default function WithdrawCard() {
+  const navigate = useNavigate();
+  const clearAccessToken = useAuthStore(state => state.clearAccessToken);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reason, setReason] = useState<WithdrawReason>('사용 빈도 낮음');
 
-  const handleConfirm = () => {
-    onWithdraw();
-    setIsModalOpen(false);
+  const handleConfirm = async () => {
+    await deleteUserAccount(reason);
+    clearAccessToken();
+    navigate(ROUTES_PATHS.LOGIN);
   };
 
   return (
@@ -30,52 +37,65 @@ export default function WithdrawCard({ onWithdraw }: WithdrawCardProps) {
               <AlertTriangleIcon className="text-red-500" size={20} />
               <h2 className="text-xl font-bold text-white">회원 탈퇴</h2>
             </div>
+
             <div className="mb-6 rounded bg-red-900/30 p-4">
               <p className="mb-2 flex items-center gap-2 text-sm font-bold text-red-400">
                 <AlertTriangleIcon size={16} />
                 탈퇴하시면 모든 정보가 즉시 삭제됩니다.
               </p>
-              <p className="text-xs text-gray-400">그래도 탈퇴 하시겠습니까?</p>
               <p className="text-xs text-gray-400">
-                삭제된 데이터는 복구할 수 없으며, 동일한 계정으로 재가입 시에도
-                이전 정보를 불러올 수 없습니다.
+                삭제된 데이터는 복구할 수 없습니다.
               </p>
             </div>
 
             <div className="mb-6">
+              <h3 className="mb-3 text-sm font-bold text-white">탈퇴 사유</h3>
+
+              <div className="flex flex-col gap-2">
+                {(
+                  [
+                    '사용 빈도 낮음',
+                    '콘텐츠 불만',
+                    '서비스 오류',
+                    '기타',
+                  ] as WithdrawReason[]
+                ).map(item => (
+                  <button
+                    className={`rounded px-3 py-2 text-left text-sm ${
+                      reason === item
+                        ? 'bg-red-600 text-white'
+                        : 'bg-gray-800 text-gray-300'
+                    }`}
+                    key={item}
+                    onClick={() => setReason(item)}
+                    type="button"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-6">
               <h3 className="mb-3 text-sm font-bold text-white">
-                탈퇴 시 삭제 되는 혜택
+                탈퇴 시 삭제되는 정보
               </h3>
+
               <div className="mb-3 flex items-start gap-3 rounded bg-gray-800 p-3">
-                <HeartIcon className="text-2xl" size={24} />
+                <HeartIcon size={24} />
                 <div>
                   <p className="font-bold text-white">팔로우 아티스트 정보</p>
                   <p className="text-xs text-gray-400">
-                    저장된 모든 아티스트 팔로우 목록과 찜을 추천 스토리를 영상
+                    모든 아티스트 팔로우 데이터
                   </p>
                 </div>
               </div>
-              <div className="mb-3 flex items-start gap-3 rounded bg-gray-800 p-3">
-                <CalendarIcon className="text-2xl" size={24} />
+
+              <div className="flex items-start gap-3 rounded bg-gray-800 p-3">
+                <CalendarIcon size={24} />
                 <div>
                   <p className="font-bold text-white">라이브 공연 내역</p>
-                  <p className="text-xs text-gray-400">
-                    예정된 모든 공연 예약 정보 및 스트리밍 시청 기록
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 rounded bg-yellow-900/30 p-3">
-                <AlertTriangleIcon className="text-2xl" size={20} />
-                <div>
-                  <p className="font-bold text-yellow-400">
-                    탈퇴 전 확인하세요.
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    예약된 공연이 있다면 자동으로 취소됩니다.
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    탈퇴 후 30일 이내 재가입이 제한됩니다.
-                  </p>
+                  <p className="text-xs text-gray-400">예약 및 시청 기록</p>
                 </div>
               </div>
             </div>
@@ -86,7 +106,7 @@ export default function WithdrawCard({ onWithdraw }: WithdrawCardProps) {
                 onClick={() => setIsModalOpen(false)}
                 variant="ghost"
               >
-                취소하고 돌아가기
+                취소
               </Button>
               <Button className="flex-1" onClick={handleConfirm} variant="red">
                 탈퇴하기
