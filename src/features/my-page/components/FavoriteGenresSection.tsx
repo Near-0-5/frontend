@@ -1,3 +1,5 @@
+import { SettingsIcon } from 'lucide-react';
+
 import type { FavoriteGenre } from '@/features/my-page/types/genre';
 
 import { Button } from '@/components';
@@ -13,13 +15,9 @@ export default function FavoriteGenresSection({
     <section>
       <h2 className="mb-4 text-lg font-semibold text-white">선호 장르</h2>
 
-      {/* TODO:
-          - 장르 수정 버튼 클릭 시 관심사 설정 모달 연결
-          - 기존 선택된 장르 상태 전달
-      */}
       <div className="mb-6 flex items-center justify-between rounded-2xl bg-[#0E1625] p-6">
         <div className="flex items-center gap-3">
-          <span className="text-xl">⚙️</span>
+          <SettingsIcon className="h-5 w-5 text-white" />
           <div>
             <p className="text-sm font-medium text-white">장르 수정</p>
             <p className="text-xs text-white/60">

@@ -10,7 +10,7 @@ export const addFavoriteArtist = async (
   body: AddFavoriteArtistRequest,
 ): Promise<AddFavoriteArtistResponse> => {
   const { data } = await api.post<AddFavoriteArtistResponse>(
-    '/api/v1/users/me/favorite-artists',
+    '/users/me/favorite-artists',
     body,
   );
 
@@ -20,5 +20,5 @@ export const addFavoriteArtist = async (
 export const deleteFavoriteArtist = async ({
   artistId,
 }: DeleteFavoriteArtistParams): Promise<void> => {
-  await api.delete(`/api/v1/users/me/favorite-artists/${artistId}`);
+  await api.delete(`/users/me/favorite-artists/${artistId}`);
 };

@@ -1,7 +1,6 @@
 export type FavoriteArtist = {
   category: string;
-  followerCount: number;
   id: number;
-  imageUrl: string;
+  imageUrl: null | string;
   name: string;
 };

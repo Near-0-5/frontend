@@ -1,73 +1,75 @@
+import { Button } from '@/components';
 import { cn } from '@/utils';
 
-type NotificationSettingItemProps = {
-  description: string;
-  isEnabled: boolean;
-  title: string;
-};
+import type { NotificationSettings } from '../types/profile';
 
-type NotificationSettingsCardProps = {
-  isLiveStartEnabled: boolean;
-  isNewContentEnabled: boolean;
-  isNewsletterEnabled: boolean;
-};
+import { useMyProfileQuery } from '../hooks/useMyProfileQuery';
+import { useUpdateNotificationSettings } from '../hooks/useUpdateNotificationSettings';
 
-export default function NotificationSettingsCard({
-  isLiveStartEnabled,
-  isNewContentEnabled,
-  isNewsletterEnabled,
-}: NotificationSettingsCardProps) {
-  const items: NotificationSettingItemProps[] = [
-    {
-      description: '팔로우한 아티스트의 새 콘텐츠',
-      isEnabled: isNewContentEnabled,
-      title: '새 콘텐츠 알림',
-    },
-    {
-      description: '라이브 방송 시작 시',
-      isEnabled: isLiveStartEnabled,
-      title: '라이브 시작 알림',
-    },
-    {
-      description: '주간 소식 받기',
-      isEnabled: isNewsletterEnabled,
-      title: '이메일 뉴스레터',
-    },
-  ];
+const ITEMS: {
+  key: keyof NotificationSettings;
+  label: string;
+}[] = [
+  {
+    key: 'new_content_from_favorite_artists',
+    label: '새 콘텐츠 알림',
+  },
+  {
+    key: 'live_start',
+    label: '라이브 시작 알림',
+  },
+  {
+    key: 'newsletter',
+    label: '이메일 뉴스레터',
+  },
+];
+
+export default function NotificationSettingsCard() {
+  const { data: profile } = useMyProfileQuery();
+  const { isPending, mutate } = useUpdateNotificationSettings();
+
+  if (!profile || !profile.notification_settings) {
+    return null;
+  }
+
+  const { notification_settings } = profile;
+
+  const handleToggle = (key: keyof NotificationSettings) => {
+    mutate({
+      notification_settings: {
+        [key]: !notification_settings[key],
+      },
+    });
+  };
 
   return (
     <section>
       <h2 className="mb-6 text-lg font-semibold text-white">알림 설정</h2>
 
-      <div className="flex flex-col gap-6">
-        {items.map(item => (
-          <NotificationSettingItem key={item.title} {...item} />
-        ))}
+      <div className="flex flex-col gap-4">
+        {ITEMS.map(item => {
+          const enabled = notification_settings[item.key];
+
+          return (
+            <div className="flex items-center justify-between" key={item.key}>
+              <span className="text-sm text-white">{item.label}</span>
+
+              <Button
+                className={cn(
+                  'px-3 text-sm font-medium',
+                  enabled ? 'text-green-400' : 'text-white/40',
+                )}
+                disabled={isPending}
+                onClick={() => handleToggle(item.key)}
+                size="sm"
+                variant="ghost"
+              >
+                {enabled ? 'ON' : 'OFF'}
+              </Button>
+            </div>
+          );
+        })}
       </div>
     </section>
-  );
-}
-
-function NotificationSettingItem({
-  description,
-  isEnabled,
-  title,
-}: NotificationSettingItemProps) {
-  return (
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-white">{title}</p>
-        <p className="text-xs text-white/40">{description}</p>
-      </div>
-
-      <span
-        className={cn(
-          'text-sm font-medium',
-          isEnabled ? 'text-green-400' : 'text-white/30',
-        )}
-      >
-        {isEnabled ? 'ON' : 'OFF'}
-      </span>
-    </div>
   );
 }

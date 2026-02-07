@@ -1,5 +1,7 @@
 import type { FavoriteArtist } from '../types/artist';
 
+import { useFavoriteArtistMutation } from '../hooks/useFavoriteArtistMutation';
+
 type FavoriteArtistsSectionProps = {
   artists: FavoriteArtist[];
 };
@@ -7,6 +9,12 @@ type FavoriteArtistsSectionProps = {
 export default function FavoriteArtistsSection({
   artists,
 }: FavoriteArtistsSectionProps) {
+  const { remove } = useFavoriteArtistMutation();
+
+  const handleUnfollow = (artistId: number) => {
+    remove.mutate(artistId);
+  };
+
   return (
     <section>
       <h2 className="mb-4 text-lg font-semibold text-white">선호 아티스트</h2>
@@ -31,6 +39,7 @@ export default function FavoriteArtistsSection({
 
               <button
                 className="mt-3 w-full rounded-full bg-[#E5E7EB] py-2 text-sm font-medium text-black"
+                onClick={() => handleUnfollow(artist.id)}
                 type="button"
               >
                 팔로우 취소
