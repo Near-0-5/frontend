@@ -64,10 +64,10 @@ export default function ConcertDetailPage() {
   ];
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-main bg-[#1A1F2E] px-6 py-8 text-white">
+    <main className="mx-auto min-h-screen w-full max-w-293 bg-[#1A1F2E] px-6 py-8 text-white">
       <div className="grid grid-cols-1 gap-10 xl:grid-cols-12">
-        <div className="space-y-4 lg:col-span-8">
-          <div className="w-full overflow-hidden rounded-2xl bg-[#10131C] shadow-2xl">
+        <div className="space-y-4 xl:col-span-8">
+          <section className="w-full overflow-hidden rounded-2xl bg-[#10131C] shadow-2xl">
             <div className="relative aspect-video w-full">
               <img
                 alt={streamDetail.concertTitle}
@@ -113,9 +113,9 @@ export default function ConcertDetailPage() {
                 </div>
               </Button>
             </div>
-          </div>
+          </section>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="rounded-xl bg-[#10131C] p-6">
               <div className="mb-2 flex items-center gap-3 text-slate-400">
                 <CalendarIcon size={20} />
@@ -134,17 +134,17 @@ export default function ConcertDetailPage() {
                 {endTime.time} 종료 예정
               </p>
             </div>
-          </div>
+          </section>
 
-          <div className="rounded-2xl bg-[#10131C] p-8 shadow-lg">
+          <section className="rounded-2xl bg-[#10131C] p-8 shadow-lg">
             <h3 className="mb-4 text-xl font-bold text-white">콘서트 설명</h3>
             <div className="leading-relaxed whitespace-pre-line text-[#CBD5E1]">
               {streamDetail.description}
             </div>
-          </div>
+          </section>
         </div>
 
-        <div className="lg:col-span-4">
+        <aside className="xl:col-span-4">
           <div className="sticky top-8 rounded-2xl bg-[#10131C] p-6 shadow-xl">
             <h3 className="mb-6 text-xl font-bold">
               {streamDetail.concertTitle}
@@ -168,8 +168,8 @@ export default function ConcertDetailPage() {
               보러가기
             </Button>
           </div>
-        </div>
+        </aside>
       </div>
-    </div>
+    </main>
   );
 }

@@ -1,8 +1,13 @@
-import { MoreVertical, Share2Icon, UserIcon } from 'lucide-react';
+import { UserIcon } from 'lucide-react';
 import { useParams } from 'react-router';
 
-import { Button, ConcertCard, OngoingLiveCard } from '@/components';
+import { ConcertCard, FollowButton, OngoingLiveCard } from '@/components';
 import { useArtistConcertsQuery } from '@/features/live/hooks';
+import {
+  useAddFavoriteArtistMutation,
+  useDeleteFavoriteArtistMutation,
+} from '@/features/main/hooks/useFavoriteArtistMutations';
+import { useFavoriteArtistsQuery } from '@/features/main/hooks/useFavoriteArtistsQuery';
 import { useArtistDetailQuery } from '@/hooks';
 
 export default function ArtistDetailPage() {
@@ -18,26 +23,43 @@ export default function ArtistDetailPage() {
   const { data: concertData, isLoading: isConcertLoading } =
     useArtistConcertsQuery(artist?.name);
 
+  const { data: favoriteArtistsData } = useFavoriteArtistsQuery();
+
+  const { mutate: addFavorite } = useAddFavoriteArtistMutation();
+  const { mutate: deleteFavorite } = useDeleteFavoriteArtistMutation();
+
   const ongoingList = concertData?.ongoing || [];
   const upcomingList = concertData?.upcoming || [];
 
+  const isFollowing =
+    favoriteArtistsData?.items.some(item => item.id === artistId) ?? false;
+
+  const handleFollowToggle = (nextIsFollowing: boolean) => {
+    if (!artistId) return;
+    if (nextIsFollowing) {
+      addFavorite({ artistId });
+    } else {
+      deleteFavorite({ artistId });
+    }
+  };
+
   if (isArtistLoading || isError || !artist) {
     return (
-      <div className="text-wthite p-8">
+      <div className="p-8 text-white">
         {isArtistLoading ? '로딩 중...' : '아티스트 정보를 불러올 수 없습니다.'}
       </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-main px-6 pb-6 text-white">
-      <section className="relative mb-8 overflow-hidden bg-[#0B0E15]">
+    <main className="mx-auto max-w-293 px-6 pb-6 text-white">
+      <section className="relative mb-8 overflow-hidden rounded-b-2xl bg-[#0B0E15]">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-40"
           style={{
-            backgroundImage: artist.profileImage
-              ? `url('${artist.profileImage}')`
-              : "url('https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?q=80&w=1600')",
+            backgroundImage:
+              artist.profileImage &&
+              "url('https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?q=80&w=1600')",
           }}
         />
         <div className="absolute inset-0 bg-linear-to-r from-[#0B0E15] via-[#0B0E15]/80 to-transparent" />
@@ -50,7 +72,7 @@ export default function ArtistDetailPage() {
           />
 
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold tracking-tight md:text-5xl">
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
               {artist.name}
             </h1>
 
@@ -63,16 +85,12 @@ export default function ArtistDetailPage() {
               <span>{artist.agency}</span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <button className="rounded-full bg-pink-600 px-6 py-2.5 text-sm font-bold transition-colors hover:bg-pink-700">
-                팔로우
-              </button>
-              <Button className="h-10 w-10 rounded-full border-none bg-white/50 hover:bg-white/40">
-                <Share2Icon className="text-white" size={20} />
-              </Button>
-              <Button className="h-10 w-10 rounded-full border-none bg-white/50 hover:bg-white/40">
-                <MoreVertical className="text-white" size={20} />
-              </Button>
+            <div className="mt-1 flex items-center gap-2">
+              <FollowButton
+                initialIsFollowing={isFollowing}
+                key={artistId}
+                onToggle={handleFollowToggle}
+              />
             </div>
           </div>
         </div>
