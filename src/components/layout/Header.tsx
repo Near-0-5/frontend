@@ -49,11 +49,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   }, []);
 
   const menuItems = [
-    {
-      icon: HomeIcon,
-      label: '홈',
-      path: ROUTES_PATHS.MAIN,
-    },
+    { icon: HomeIcon, label: '홈', path: ROUTES_PATHS.MAIN },
     {
       icon: UserIcon,
       label: 'My Page',
@@ -70,7 +66,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
   return (
     <header className={cn(headerRootVariants())}>
-      <div className={cn(headerGroupVariants())}>
+      <div className={cn(headerGroupVariants(), 'pl-2 md:pl-2 lg:pl-2')}>
         <div className="md:hidden">
           <Dropdown onOpenChange={setIsDropdownOpen} open={isDropdownOpen}>
             <DropdownTrigger>
