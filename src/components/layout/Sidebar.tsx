@@ -57,7 +57,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     <aside
       className={cn(
         'fixed top-15 left-0 z-40 hidden h-[calc(100vh-60px)] flex-col overflow-hidden bg-[#070913] transition-all duration-300 md:flex',
-        isOpen ? 'w-60' : 'w-0',
+        isOpen ? 'w-sidebar' : 'w-0',
       )}
     >
       <nav className="flex-1 px-4 py-10">

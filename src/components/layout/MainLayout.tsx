@@ -20,7 +20,7 @@ export default function MainLayout() {
         <main
           className={cn(
             'flex-1 transition-all duration-300',
-            isSidebarOpen ? 'ml-0 md:ml-60' : 'ml-0',
+            isSidebarOpen ? 'ml-0 md:ml-sidebar' : 'ml-0',
           )}
         >
           <Outlet context={isSidebarOpen} />
