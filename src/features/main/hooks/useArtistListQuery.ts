@@ -10,9 +10,9 @@ type UseArtistListQueryParams = {
 };
 
 export const useArtistListQuery = (
-  { page = 1, pageSize = 10 }: UseArtistListQueryParams = {
+  { page = 1, pageSize = 21 }: UseArtistListQueryParams = {
     page: 1,
-    pageSize: 10,
+    pageSize: 21,
   },
 ) =>
   useQuery<ArtistList>({

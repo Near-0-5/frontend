@@ -57,7 +57,7 @@ export default function UpcomingStreamingSection({
     <section className="w-full px-6 py-10 md:px-10">
       <div className="mx-auto max-w-293 space-y-6">
         <SectionHeader
-          onMoreClick={handleClickMore}
+          onMoreClick={showMoreButton ? handleClickMore : undefined}
           showMoreButton={showMoreButton}
           title={title}
         />
@@ -68,7 +68,7 @@ export default function UpcomingStreamingSection({
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {list.slice(0, 3).map(concert => (
+            {list.map(concert => (
               <ConcertCard
                 dateLabel={concert.startAt}
                 id={concert.id}

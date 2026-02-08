@@ -52,7 +52,6 @@ export default function OngoingStreamingSection({
   const { isLoggedIn } = useAuthStore();
 
   const { data, isError, isFetched } = useStreamingListQuery('LIVE');
-
   const rawList: StreamSession[] = data?.items ?? [];
 
   const liveItems: OngoingViewItem[] = rawList.map(concert => ({
@@ -85,7 +84,7 @@ export default function OngoingStreamingSection({
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {list.slice(0, 3).map((concert, index) => (
+          {list.map((concert, index) => (
             <OngoingLiveCard
               durationLabel={concert.durationLabel}
               id={concert.id}

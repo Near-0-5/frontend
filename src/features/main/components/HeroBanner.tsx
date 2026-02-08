@@ -10,19 +10,12 @@ import { useAuthStore } from '@/features/auth';
 
 type HeroBannerProps = {
   concert?: {
-    concert_title: string;
-    session_name: string;
-    start_at: string;
-    thumbnail_url?: string;
+    concertTitle: string;
+    id: number;
+    sessionName: string;
+    startAt: string;
+    thumbnailUrl: null | string;
   };
-};
-
-const FALLBACK_DATA = {
-  backgroundImageUrl: '/images/hero-banner.png',
-  primaryActionLabel: '알림 신청하기',
-  statusLabel: 'Upcoming Concert',
-  subtitle: 'From KickFlip, To WE:Flip',
-  title: '2026 KickFlip FAN-CON',
 };
 
 export default function HeroBanner({ concert }: HeroBannerProps) {
@@ -30,16 +23,15 @@ export default function HeroBanner({ concert }: HeroBannerProps) {
   const { isLoggedIn } = useAuthStore();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  const data = concert
-    ? {
-        backgroundImageUrl:
-          concert.thumbnail_url || FALLBACK_DATA.backgroundImageUrl,
-        primaryActionLabel: FALLBACK_DATA.primaryActionLabel,
-        statusLabel: FALLBACK_DATA.statusLabel,
-        subtitle: concert.session_name || FALLBACK_DATA.subtitle,
-        title: concert.concert_title,
-      }
-    : FALLBACK_DATA;
+  if (!concert) return null;
+
+  const data = {
+    backgroundImageUrl: concert.thumbnailUrl ?? '/images/hero-banner.png',
+    primaryActionLabel: '알림 신청하기',
+    statusLabel: 'Upcoming Concert',
+    subtitle: concert.sessionName,
+    title: concert.concertTitle,
+  };
 
   const handleClickAlert = () => {
     if (!isLoggedIn) {
@@ -54,6 +46,7 @@ export default function HeroBanner({ concert }: HeroBannerProps) {
   };
 
   const handleSubmitAlert = () => {
+    // TODO: 알림 신청 API 연동
     setIsAlertOpen(false);
   };
 
@@ -66,9 +59,7 @@ export default function HeroBanner({ concert }: HeroBannerProps) {
             className="h-full w-full object-cover object-center"
             src={data.backgroundImageUrl}
           />
-
           <div className="absolute inset-0 bg-linear-to-t from-[#111322] via-[#111322]/10 to-transparent" />
-
           <div className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
         </div>
 
