@@ -1,17 +1,58 @@
-import { Link, useLocation } from 'react-router';
+import {
+  HeartIcon,
+  HomeIcon,
+  Mic2Icon,
+  RadioIcon,
+  UserIcon,
+} from 'lucide-react';
+import { Link } from 'react-router';
 
-import { MENU_ITEMS } from '@/constants';
+import { ROUTES_PATHS } from '@/constants';
 import { cn } from '@/utils/cn';
-import { isMenuItemActive } from '@/utils/navigation';
 
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-export default function Sidebar({ isOpen }: SidebarProps) {
-  const location = useLocation();
+const menuItems = [
+  {
+    icon: HomeIcon,
+    isActive: location.pathname === ROUTES_PATHS.MAIN,
+    label: '홈',
+    path: ROUTES_PATHS.MAIN,
+  },
+  {
+    icon: UserIcon,
+    isActive:
+      location.pathname === ROUTES_PATHS.MYPAGE &&
+      location.search === '?tab=account',
+    label: 'My Page',
+    path: `${ROUTES_PATHS.MYPAGE}?tab=account`,
+  },
+  {
+    icon: Mic2Icon,
+    isActive: location.pathname === ROUTES_PATHS.ARTIST_LIST,
+    label: 'Artist',
+    path: ROUTES_PATHS.ARTIST_LIST,
+  },
+  {
+    icon: RadioIcon,
+    isActive: location.pathname === ROUTES_PATHS.STREAMING_LIST,
+    label: 'Streaming',
+    path: ROUTES_PATHS.STREAMING_LIST,
+  },
+  {
+    icon: HeartIcon,
+    isActive:
+      location.pathname === ROUTES_PATHS.MYPAGE &&
+      location.search === '?tab=interest',
+    label: 'Favorite',
+    path: `${ROUTES_PATHS.MYPAGE}?tab=interest`,
+  },
+];
 
+export default function Sidebar({ isOpen }: SidebarProps) {
   return (
     <aside
       className={cn(
@@ -20,15 +61,14 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       )}
     >
       <nav className="flex-1 px-4 py-10">
-        {MENU_ITEMS.map(item => {
-          const isActive = isMenuItemActive(location, item.path);
+        {menuItems.map(item => {
           const Icon = item.icon;
 
           return (
             <Link
               className={cn(
                 'mb-1 flex items-center gap-3 rounded-xl px-4 py-3 transition-all',
-                isActive
+                item.isActive
                   ? 'bg-[#dc196d] text-white shadow-md'
                   : 'hover:bg-bg-section-dark text-[#c7c9d9] hover:text-white',
               )}

@@ -1,4 +1,11 @@
-import { MenuIcon } from 'lucide-react';
+import {
+  HeartIcon,
+  HomeIcon,
+  MenuIcon,
+  Mic2Icon,
+  RadioIcon,
+  UserIcon,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 
@@ -15,10 +22,9 @@ import {
 } from '@/components/header/header.styles';
 import NotificationDropdown from '@/components/header/NotificationDropdown';
 import UserMenuDropdown from '@/components/header/UserMenuDropdown';
-import { MENU_ITEMS, ROUTES_PATHS } from '@/constants';
+import { ROUTES_PATHS } from '@/constants';
 import { useAuthStore } from '@/features/auth';
 import { cn } from '@/utils';
-import { isMenuItemActive } from '@/utils/navigation';
 
 type HeaderProps = {
   onMenuClick: () => void;
@@ -42,6 +48,26 @@ export function Header({ onMenuClick }: HeaderProps) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const menuItems = [
+    {
+      icon: HomeIcon,
+      label: '홈',
+      path: ROUTES_PATHS.MAIN,
+    },
+    {
+      icon: UserIcon,
+      label: 'My Page',
+      path: `${ROUTES_PATHS.MYPAGE}?tab=account`,
+    },
+    { icon: Mic2Icon, label: 'Artist', path: ROUTES_PATHS.ARTIST_LIST },
+    { icon: RadioIcon, label: 'Streaming', path: ROUTES_PATHS.STREAMING_LIST },
+    {
+      icon: HeartIcon,
+      label: 'Favorite',
+      path: `${ROUTES_PATHS.MYPAGE}?tab=interest`,
+    },
+  ];
+
   return (
     <header className={cn(headerRootVariants())}>
       <div className={cn(headerGroupVariants())}>
@@ -55,10 +81,13 @@ export function Header({ onMenuClick }: HeaderProps) {
 
             <DropdownContent
               align="start"
-              className="mt-1 -ml-4 w-52 rounded-none border border-[#1f2937] bg-[#070913] p-2 shadow-xl"
+              className="mt-1 -ml-4 w-44 rounded-none border border-[#1f2937] bg-[#070913] p-2 shadow-xl sm:w-52"
             >
-              {MENU_ITEMS.map(item => {
-                const isActive = isMenuItemActive(location, item.path);
+              {menuItems.map(item => {
+                const currentFullUrl = `${location.pathname}${location.search}`;
+                const isActive = item.path.includes('?')
+                  ? currentFullUrl === item.path
+                  : location.pathname === item.path;
 
                 return (
                   <DropdownItem
@@ -70,7 +99,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                   >
                     <div
                       className={cn(
-                        'flex w-full items-center gap-3 rounded-xl px-4 py-3 transition-all',
+                        'flex w-full items-center gap-3 rounded-xl px-3 py-3 transition-all sm:px-4',
                         isActive
                           ? 'bg-[#dc196d] text-white shadow-md'
                           : 'text-[#c7c9d9] hover:bg-white/10',
