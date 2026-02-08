@@ -79,7 +79,6 @@ export default function ArtistListPage() {
         ) : (
           <section className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {artists.map(artist => {
-              // 1. [핵심] 반복문 안에서 '현재 아티스트'가 내 목록에 있는지 확인
               const isFollowing =
                 favoriteArtistsData?.items.some(fav => fav.id === artist.id) ??
                 false;
@@ -117,15 +116,11 @@ export default function ArtistListPage() {
                         </p>
                       </div>
 
-                      {/* 2. [핵심] 버튼 연결 */}
                       <FollowButton
                         className="mt-1 shrink-0"
-                        // 위에서 계산한 값 넣어주기
                         initialIsFollowing={isFollowing}
-                        // 토글 될 때 실행할 로직을 인라인으로 작성
                         onToggle={nextIsFollowing => {
                           if (nextIsFollowing) {
-                            // 여기서는 artist.id 접근 가능!
                             addFavorite({ artistId: artist.id });
                           } else {
                             deleteFavorite({ artistId: artist.id });

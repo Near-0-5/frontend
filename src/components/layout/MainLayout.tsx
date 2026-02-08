@@ -6,21 +6,24 @@ import { HEADER_HEIGHT } from '@/constants/layout';
 import { cn } from '@/utils';
 
 export default function MainLayout() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <div className="min-h-screen bg-[#1A1F2E]">
-      <Header onMenuClick={() => setIsOpen(prev => !prev)} />
+      <Header onMenuClick={() => setIsSidebarOpen(prev => !prev)} />
 
       <div className="flex" style={{ paddingTop: HEADER_HEIGHT }}>
-        <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <Sidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
         <main
           className={cn(
             'flex-1 transition-all duration-300',
-            isOpen ? 'ml-60' : 'ml-0',
+            isSidebarOpen ? 'ml-0 md:ml-60' : 'ml-0',
           )}
         >
-          <Outlet />
+          <Outlet context={isSidebarOpen} />
         </main>
       </div>
 

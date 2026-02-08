@@ -4,6 +4,7 @@ import { cn } from '@/utils';
 
 type DropdownItemProps = {
   children: React.ReactNode;
+  className?: string;
   isDanger?: boolean;
   isDisabled?: boolean;
   onSelect?: () => void;
@@ -11,6 +12,7 @@ type DropdownItemProps = {
 
 export default function DropdownItem({
   children,
+  className,
   isDanger = false,
   isDisabled = false,
   onSelect,
@@ -29,6 +31,7 @@ export default function DropdownItem({
           'text-red-400',
           'focus:bg-red-900/30 data-highlighted:bg-red-900/30',
         ],
+        className,
       ])}
       disabled={isDisabled}
       onSelect={onSelect}

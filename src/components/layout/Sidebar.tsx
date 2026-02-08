@@ -5,7 +5,7 @@ import {
   RadioIcon,
   UserIcon,
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 
 import { ROUTES_PATHS } from '@/constants';
 import { cn } from '@/utils/cn';
@@ -15,50 +15,48 @@ type SidebarProps = {
   onClose: () => void;
 };
 
+const menuItems = [
+  {
+    icon: HomeIcon,
+    isActive: location.pathname === ROUTES_PATHS.MAIN,
+    label: '홈',
+    path: ROUTES_PATHS.MAIN,
+  },
+  {
+    icon: UserIcon,
+    isActive:
+      location.pathname === ROUTES_PATHS.MYPAGE &&
+      location.search === '?tab=account',
+    label: 'My Page',
+    path: `${ROUTES_PATHS.MYPAGE}?tab=account`,
+  },
+  {
+    icon: Mic2Icon,
+    isActive: location.pathname === ROUTES_PATHS.ARTIST_LIST,
+    label: 'Artist',
+    path: ROUTES_PATHS.ARTIST_LIST,
+  },
+  {
+    icon: RadioIcon,
+    isActive: location.pathname === ROUTES_PATHS.STREAMING_LIST,
+    label: 'Streaming',
+    path: ROUTES_PATHS.STREAMING_LIST,
+  },
+  {
+    icon: HeartIcon,
+    isActive:
+      location.pathname === ROUTES_PATHS.MYPAGE &&
+      location.search === '?tab=interest',
+    label: 'Favorite',
+    path: `${ROUTES_PATHS.MYPAGE}?tab=interest`,
+  },
+];
+
 export default function Sidebar({ isOpen }: SidebarProps) {
-  const location = useLocation();
-
-  const menuItems = [
-    {
-      icon: HomeIcon,
-      isActive: location.pathname === ROUTES_PATHS.MAIN,
-      label: '홈',
-      path: ROUTES_PATHS.MAIN,
-    },
-    {
-      icon: UserIcon,
-      isActive:
-        location.pathname === ROUTES_PATHS.MYPAGE &&
-        location.search === '?tab=account',
-      label: 'My Page',
-      path: `${ROUTES_PATHS.MYPAGE}?tab=account`,
-    },
-    {
-      icon: Mic2Icon,
-      isActive: location.pathname === ROUTES_PATHS.ARTIST_LIST,
-      label: 'Artist',
-      path: ROUTES_PATHS.ARTIST_LIST,
-    },
-    {
-      icon: RadioIcon,
-      isActive: location.pathname === ROUTES_PATHS.STREAMING_LIST,
-      label: 'Streaming',
-      path: ROUTES_PATHS.STREAMING_LIST,
-    },
-    {
-      icon: HeartIcon,
-      isActive:
-        location.pathname === ROUTES_PATHS.MYPAGE &&
-        location.search === '?tab=interest',
-      label: 'Favorite',
-      path: `${ROUTES_PATHS.MYPAGE}?tab=interest`,
-    },
-  ];
-
   return (
     <aside
       className={cn(
-        'fixed top-15 left-0 z-40 flex h-[calc(100vh-60px)] flex-col overflow-hidden bg-[#070913] transition-all duration-300',
+        'fixed top-15 left-0 z-40 hidden h-[calc(100vh-60px)] flex-col overflow-hidden bg-[#070913] transition-all duration-300 md:flex',
         isOpen ? 'w-60' : 'w-0',
       )}
     >
