@@ -1,11 +1,15 @@
 import { DialogTitle } from '@/components';
+import { cn } from '@/utils';
 
 type ModalTitleProps = {
   children: React.ReactNode;
+  className?: string;
 };
 
-export default function ModalTitle({ children }: ModalTitleProps) {
+export default function ModalTitle({ children, className }: ModalTitleProps) {
   return (
-    <DialogTitle className="text-lg font-semibold">{children}</DialogTitle>
+    <DialogTitle className={cn('text-lg font-semibold text-white', className)}>
+      {children}
+    </DialogTitle>
   );
 }

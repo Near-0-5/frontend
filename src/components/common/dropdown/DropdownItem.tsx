@@ -17,12 +17,19 @@ export default function DropdownItem({
 }: DropdownItemProps) {
   return (
     <DropdownMenu.Item
-      className={cn(
-        'flex cursor-pointer items-center rounded px-3 py-2 text-sm outline-none select-none',
-        'focus:bg-gray-100',
-        isDisabled && 'cursor-not-allowed opacity-50',
-        isDanger && 'text-red-600 focus:bg-red-50',
-      )}
+      className={cn([
+        'flex items-center rounded px-3 py-2 text-sm outline-none select-none',
+        'cursor-pointer text-white',
+
+        'focus:bg-[#2A2F3E] data-highlighted:bg-[#2A2F3E]',
+
+        'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+
+        isDanger && [
+          'text-red-400',
+          'focus:bg-red-900/30 data-highlighted:bg-red-900/30',
+        ],
+      ])}
       disabled={isDisabled}
       onSelect={onSelect}
     >

@@ -20,7 +20,15 @@ export default function DropdownContent({
       <DropdownMenu.Content
         align={align}
         className={cn(
-          'z-50 min-w-40 rounded-md border bg-white p-1 shadow-md',
+          [
+            'z-50 min-w-40 p-1',
+            'rounded-lg',
+
+            'bg-[#1A1F2E] text-white',
+            'border border-[#2A2F3E]',
+
+            'shadow-xl shadow-black/40',
+          ],
           className,
         )}
         sideOffset={sideOffset}

@@ -6,5 +6,9 @@ type ModalHeaderProps = {
 };
 
 export default function ModalHeader({ children, className }: ModalHeaderProps) {
-  return <div className={cn('mb-4 space-y-1', className)}>{children}</div>;
+  return (
+    <div className={cn(['mb-4 space-y-1', 'text-white'], className)}>
+      {children}
+    </div>
+  );
 }
