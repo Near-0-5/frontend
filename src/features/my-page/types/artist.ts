@@ -1,6 +1,8 @@
-export type FavoriteArtist = {
-  category: string;
+export type Artist = {
+  agency: string;
+  description?: null | string;
+  followerCount: number;
   id: number;
-  imageUrl: null | string;
   name: string;
+  profileImage: null | string;
 };

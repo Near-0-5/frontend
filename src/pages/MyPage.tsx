@@ -4,28 +4,26 @@ import { useSearchParams } from 'react-router';
 import type { MyPageMenuKey } from '@/features/my-page/types/menu';
 
 import CategorySection from '@/features/main/components/CategorySection';
+import { uploadProfileImage } from '@/features/my-page/api/profileImage';
 import {
   AccountInfoCard,
   FavoriteArtistsSection,
   MyPageMenu,
-  NotificationSettingsCard,
   ProfileSummary,
   WithdrawCard,
 } from '@/features/my-page/components';
+import NotificationSettingsCard from '@/features/my-page/components/NotificationSettingsCard';
 import { useFavoriteArtistsQuery } from '@/features/my-page/hooks/useFavoriteArtistsQuery';
 import { useMyProfileQuery } from '@/features/my-page/hooks/useMyProfileQuery';
+import { useUpdateNotificationSettings } from '@/features/my-page/hooks/useUpdateNotificationSettings';
 
 export default function MyPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const tabParam = searchParams.get('tab') as MyPageMenuKey | null;
+
   const [activeMenu, setActiveMenu] = useState<MyPageMenuKey>(
     tabParam ?? 'interest',
   );
-
-  const { data: profile } = useMyProfileQuery();
-  const { data: favoriteArtists = [] } = useFavoriteArtistsQuery();
-  const [profileImage, setProfileImage] = useState<null | string>(null);
 
   useEffect(() => {
     if (tabParam && tabParam !== activeMenu) {
@@ -33,11 +31,46 @@ export default function MyPage() {
     }
   }, [tabParam, activeMenu]);
 
-  const handleImageChange = (file: File) => {
-    setProfileImage(URL.createObjectURL(file));
+  const { data: favoriteArtists = [] } = useFavoriteArtistsQuery();
+  const { data: profile, refetch } = useMyProfileQuery();
+  const { isPending, mutate } = useUpdateNotificationSettings();
+
+  if (!profile) {
+    return null;
+  }
+
+  const profileImage =
+    profile.profile_img_url != null
+      ? `${profile.profile_img_url}?t=${Date.now()}`
+      : null;
+
+  const handleImageChange = async (file: File) => {
+    await uploadProfileImage(file);
+    await refetch();
   };
 
-  if (!profile) return null;
+  const notificationSettingsUI = {
+    live_start: profile.notification_settings?.live_start_notification ?? false,
+    new_content_from_favorite_artists:
+      profile.notification_settings?.new_content_from_favorite_artists ?? false,
+    newsletter: profile.notification_settings?.marketing_consent ?? false,
+  };
+
+  const handleToggleNotification = (
+    key: keyof typeof notificationSettingsUI,
+  ) => {
+    const nextUI = {
+      ...notificationSettingsUI,
+      [key]: !notificationSettingsUI[key],
+    };
+
+    mutate({
+      live_start_notification: nextUI.live_start,
+      marketing_consent: nextUI.newsletter,
+      new_content_from_favorite_artists:
+        nextUI.new_content_from_favorite_artists,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#101828]">
@@ -85,7 +118,11 @@ export default function MyPage() {
             </div>
 
             <div className="rounded-2xl bg-[#1A1F2E] p-8">
-              <NotificationSettingsCard />
+              <NotificationSettingsCard
+                isPending={isPending}
+                onToggle={handleToggleNotification}
+                settings={notificationSettingsUI}
+              />
             </div>
 
             <div className="rounded-2xl bg-[#1A1F2E] p-8">

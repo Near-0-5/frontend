@@ -1,4 +1,5 @@
 export { default as AccountInfoCard } from './AccountInfoCard';
+export { default as AccountInfoItem } from './AccountInfoItem';
 export { default as FavoriteArtistCard } from './FavoriteArtistCard';
 export { default as FavoriteArtistsSection } from './FavoriteArtistsSection';
 export { default as FavoriteGenresSection } from './FavoriteGenresSection';

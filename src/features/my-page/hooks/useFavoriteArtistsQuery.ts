@@ -12,10 +12,13 @@ export const useFavoriteArtistsQuery = () =>
       const data = await getMyFavoriteArtists();
 
       return data.items.map<FavoriteArtist>(item => ({
-        category: item.category_type,
-        id: String(item.id),
-        imageUrl: item.profile_image,
+        agency: '',
+        followerCount: 0,
+
+        id: Number(item.id),
         name: item.name,
+
+        profileImage: item.profile_image ?? null,
       }));
     },
     queryKey: FAVORITE_ARTISTS_QUERY_KEY,

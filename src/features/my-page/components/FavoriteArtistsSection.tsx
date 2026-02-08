@@ -53,8 +53,11 @@ export default function FavoriteArtistsSection({
             >
               <img
                 alt={artist.name}
-                className="h-40 w-full object-cover"
-                src={artist.imageUrl ?? undefined}
+                className="h-40 w-full bg-[#0E1625] object-cover"
+                onError={e => {
+                  e.currentTarget.src = '/images/default-artist.png';
+                }}
+                src={artist.profileImage ?? '/images/default-artist.png'}
               />
 
               <div className="p-4">

@@ -2,7 +2,6 @@ import { UserIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 import {
-  Button,
   Dropdown,
   DropdownContent,
   DropdownItem,
@@ -23,14 +22,9 @@ export default function UserMenuDropdown() {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button
-          className="flex gap-1"
-          rounded="full"
-          size="default"
-          variant="pink"
-        >
-          <UserIcon />
-        </Button>
+        <button className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-r from-[#2B7FFF] via-[#AD46FF] to-[#F6339A]">
+          <UserIcon className="h-4 w-4 text-white" />
+        </button>
       </DropdownTrigger>
 
       <DropdownContent align="end">

@@ -1,9 +1,10 @@
 export type FavoriteArtist = {
-  category: string;
-  followerCount?: number;
-  id: string;
-  imageUrl: null | string;
+  agency: string;
+  description?: null | string;
+  followerCount: number;
+  id: number;
   name: string;
+  profileImage: null | string;
 };
 
 export type FavoriteArtistApiItem = {
