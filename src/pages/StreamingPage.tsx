@@ -54,7 +54,7 @@ export default function StreamingPage() {
         }}
       >
         <div className="flex min-h-0 w-full flex-col gap-4 overflow-hidden px-4 transition-all duration-300 ease-out">
-          <div className="relative max-h-[70vh] w-full shrink-0 overflow-hidden rounded-xl bg-black">
+          <div className="relative w-full shrink-0 overflow-hidden rounded-xl bg-black">
             {isStreamLive ? (
               <StreamPlayer playbackUrl={playbackUrl} />
             ) : (
