@@ -25,7 +25,6 @@ export default function StreamInfoSection({
   const streamStartDate = `${new Date(streamDetail.startAt).toLocaleString()} 시작됨`;
 
   const artistId = streamDetail.lineup[0]?.id;
-  const profileImg = streamDetail.lineup[0]?.profileImgUrl;
   const artistName = streamDetail.lineup[0]?.name || 'Unknown';
 
   const isFollowing =
@@ -73,15 +72,7 @@ export default function StreamInfoSection({
               type="button"
               variant="ghost"
             >
-              {profileImg ? (
-                <img
-                  alt="Profile"
-                  className="h-10 w-10 rounded-full object-cover"
-                  src={profileImg}
-                />
-              ) : (
-                <div className="h-10 w-10 rounded-full bg-linear-to-tr from-pink-500 to-violet-500" />
-              )}
+              <div className="h-10 w-10 rounded-full bg-linear-to-tr from-pink-500 to-violet-500" />
               <span className="text-sm font-semibold text-white">
                 {artistName}
               </span>
