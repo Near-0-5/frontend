@@ -20,24 +20,16 @@ export default function ConcertDetailPage() {
   const { navigateToArtist } = useArtistNavigation();
 
   const { isError, isLoading, streamDetail } = useStreamSession(sessionId);
-  const isLive = streamDetail.status === 'LIVE';
-  const buttonText =
-    streamDetail.status === 'LIVE'
-      ? '보러가기'
-      : streamDetail.status === 'READY'
-        ? '라이브 준비 상태입니다. 시간을 확인 해주세요!'
-        : '종료된 라이브입니다.';
 
-  const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = ConcertMockImage;
   };
 
-  const handleProfileImgError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>,
-  ) => {
+  const handleProfileImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = ProfileMockIcon;
   };
 
+  // ✅ 안전 가드 (먼저 실행)
   if (isLoading || isError || !streamDetail) {
     return (
       <div className="p-8 text-white">
@@ -46,14 +38,27 @@ export default function ConcertDetailPage() {
     );
   }
 
+  // ✅ streamDetail 보장 이후 계산
+  const isLive = streamDetail.status === 'LIVE';
+
+  const buttonText =
+    streamDetail.status === 'LIVE'
+      ? '보러가기'
+      : streamDetail.status === 'READY'
+        ? '라이브 준비 상태입니다. 시간을 확인 해주세요!'
+        : '종료된 라이브입니다.';
+
   const mainArtist =
-    streamDetail.lineup.find(artist => artist.isMain) || streamDetail.lineup[0];
+    streamDetail.lineup?.find(a => a.isMain) || streamDetail.lineup?.[0];
 
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
     return {
       date: `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`,
-      time: `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`,
+      time: `${date.getHours().toString().padStart(2, '0')}:${date
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}`,
     };
   };
 
@@ -131,6 +136,7 @@ export default function ConcertDetailPage() {
               <p className="text-xl font-bold">{startTime.date}</p>
               <p className="font-bold text-pink-500">{startTime.time} 시작</p>
             </div>
+
             <div className="rounded-xl bg-[#10131C] p-6">
               <div className="mb-2 flex items-center gap-3 text-slate-400">
                 <ClockIcon size={20} />
