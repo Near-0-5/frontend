@@ -18,7 +18,7 @@ export default function MainPage() {
     list.find(concert => concert.id === HERO_CONCERT_ID) ?? undefined;
 
   return (
-    <div className="min-h-screen bg-[#1A1F2E]">
+    <div className="min-h-screen overflow-x-hidden bg-[#1A1F2E]">
       <HeroBanner concert={heroConcert} />
       <UpcomingStreamingSection title="예정된 콘서트" />
       <OngoingStreamingSection title="진행중인 라이브 콘서트" />

@@ -63,13 +63,13 @@ export default function ArtistSection({ title }: ArtistSectionProps) {
             추천 아티스트가 없습니다.
           </div>
         ) : (
-          <div className="flex gap-4 pb-4">
+          <div className="flex flex-wrap gap-4 pb-4">
             {list.map(({ id, name, profileImage }) => {
               const showRealImage = hasRealImage(profileImage);
 
               return (
                 <article
-                  className="flex w-34.5 flex-col items-center justify-center"
+                  className="flex min-w-30 flex-col items-center justify-center"
                   key={id}
                 >
                   <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-transparent transition-colors hover:border-[#DC196D]">
