@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import { ConcertMockImage, ProfileMockIcon } from '@/assets';
 import { Button } from '@/components';
-import { useStreamSession } from '@/features/live/hooks';
+import { useStreamDetail } from '@/features/live/hooks';
 import { useArtistNavigation } from '@/hooks';
 
 export default function ConcertDetailPage() {
@@ -19,7 +19,7 @@ export default function ConcertDetailPage() {
   const navigate = useNavigate();
   const { navigateToArtist } = useArtistNavigation();
 
-  const { isError, isLoading, streamDetail } = useStreamSession(sessionId);
+  const { isError, isLoading, streamDetail } = useStreamDetail(sessionId);
 
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = ConcertMockImage;
