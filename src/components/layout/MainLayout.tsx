@@ -9,7 +9,7 @@ export default function MainLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-[#070913]">
+    <div className="min-h-screen bg-[#1A1F2E]">
       <Header onMenuClick={() => setIsSidebarOpen(prev => !prev)} />
 
       <div className="flex" style={{ paddingTop: HEADER_HEIGHT }}>
