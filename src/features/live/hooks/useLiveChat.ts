@@ -19,9 +19,14 @@ export function useLiveChat({ streamingId }: UseLiveChatParams) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   useEffect(() => {
-    const socket = new WebSocket(
-      `wss://d15qsadcdtxaqn.cloudfront.net/api/v1/streaming/10/chat`,
+    if (!streamingId) return;
+
+    const wsBaseUrl = import.meta.env.VITE_BACKEND_BASE_URL.replace(
+      /^https?/,
+      'wss',
     );
+
+    const socket = new WebSocket(`${wsBaseUrl}/streaming/${streamingId}/chat`);
 
     socketRef.current = socket;
 
